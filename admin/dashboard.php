@@ -25,7 +25,7 @@ $last_student = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON u
     <div class="container">
         <div class="columns is-multiline ">
             <div class="column">
-                <div class="box notification is-primary">
+                <div class="box notification is-info">
                     <div class="heading">Colleges</div>
                     <div class="title"><span class="Count">231</span> <i class="fa fa-university"></i></div>
                 </div>

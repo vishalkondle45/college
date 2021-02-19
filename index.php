@@ -1,6 +1,7 @@
 <?php
 include_once 'includes/conn.php';
 session_start();
+$_SESSION['user'] = 'normal';
 if (isset($_POST['message'])) {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);
@@ -51,7 +52,7 @@ if (isset($_POST['login'])) {
     }
 </style>
 
-<body>
+<body class="section">
     <!-- Navigation Bar Starts -->
     <nav class="navbar is-fixed-top is-primary" role="navigation" aria-label="main navigation">
 
@@ -94,7 +95,7 @@ if (isset($_POST['login'])) {
 
     <!-- SlideShow Starts -->
     <div class="container" id="home">
-        <br><br><br>
+        <br>
         <img class="nature" src="https://www.w3schools.com/w3js/img_snowtops.jpg" width="100%">
         <img class="nature" src="https://www.w3schools.com/w3js/img_mountains.jpg" width="100%">
         <img class="nature" src="https://www.w3schools.com/w3js/img_nature.jpg" width="100%">

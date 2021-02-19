@@ -28,18 +28,48 @@
                 <i class="fa fa-dashboard"></i> &nbsp; Dashboard
             </a>
 
-            <a class="navbar-item" href="new_college.php">
-                <i class="fa fa-plus"></i> &nbsp; New College
-            </a>
-            <a class="navbar-item" href="colleges.php">
-                <i class="fa fa-university"></i> &nbsp; Colleges
-            </a>
-            <a class="navbar-item" href="teachers.php">
-                <i class="fa fa-chalkboard-teacher"></i> &nbsp; Teachers
-            </a>
-            <a class="navbar-item" href="students.php">
-                <i class="fa fa-users"></i> &nbsp; Students
-            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    Colleges
+                </a>
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="new_college.php">
+                        <i class="fa fa-plus"></i> &nbsp; New College
+                    </a>
+                    <a class="navbar-item" href="colleges.php">
+                        <i class="fa fa-university"></i> &nbsp; Display Colleges
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    Teachers
+                </a>
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="new_teacher.php">
+                        <i class="fa fa-plus"></i> &nbsp; New Teacher
+                    </a>
+                    <a class="navbar-item" href="teachers.php">
+                        <i class="fa fa-chalkboard-teacher"></i> &nbsp; Teachers
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <p class="navbar-link">
+                    Student
+                </p>
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="new_student.php">
+                        <i class="fa fa-plus"></i> &nbsp; New Student
+                    </a>
+                    <a class="navbar-item" href="students.php">
+                        <i class="fa fa-users"></i> &nbsp; Students
+                    </a>
+                </div>
+            </div>
+
         </div>
 
         <div class="navbar-end">
@@ -49,5 +79,5 @@
         </div>
     </div>
 </nav>
-<br><br>
+<!--  -->
 <!-- Navigation Bar Ends -->

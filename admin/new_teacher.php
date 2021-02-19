@@ -1,14 +1,10 @@
 <?php
 $conn = mysqli_connect('localhost', 'root', '', 'collegeweb');
-$query = mysqli_query($conn, "SELECT help_category_id, COUNT(*) FROM help_topic GROUP BY help_category_id");
-
-$last_college = mysqli_query($conn, "SELECT * FROM college order by id desc LIMIT 3");
-$last_teacher = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `role`='teacher' ORDER BY users.id DESC LIMIT 3");
-$last_student = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `role`='student' ORDER BY users.id DESC LIMIT 3");
-
-
 if (isset($_POST['submit'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $id = '';
+    $fname = mysqli_real_escape_string($conn, $_POST['fname']);
+    $mname = mysqli_real_escape_string($conn, $_POST['mname']);
+    $lname = mysqli_real_escape_string($conn, $_POST['lname']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -16,35 +12,38 @@ if (isset($_POST['submit'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $city = mysqli_real_escape_string($conn, $_POST['city']);
     $pincode = mysqli_real_escape_string($conn, $_POST['pincode']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-
-    //Status
-    $tempname = $_FILES["logo"]["tmp_name"];
-    $filename = $_FILES["logo"]["name"];
-
+    //Photo
+    $tempname = $_FILES["photo"]["tmp_name"];
+    $filename = $_FILES["photo"]["name"];
     //Setting File Name
     $id = md5(time());
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
     $filename =  $id . '.' . $ext;
-    $folder = "../media/logo/" . $filename;
-
+    $folder = "../media/dp/" . $filename;
     //Uploading File
     if (move_uploaded_file($tempname, $folder)) {
     } else {
-        echo "<script>alert('Error While Uploading Logo!!!')</script>";
+        echo "<script>alert('Error While Uploading Image!!!')</script>";
         exit();
     }
 
-    if (mysqli_query($conn, "INSERT INTO college VALUES(NULL, '$name', '$username', '$password', '$email', '$mobile', '$address', '$city', '$pincode', '$filename', current_timestamp(), '$status')")) {
-        echo "<script>alert('College Added Successful!!!')</script>";
+    $college = mysqli_real_escape_string($conn, $_POST['college']);
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $doj = 'current_timestamp()';
+    $uniqid = md5(time());
+    $education = mysqli_real_escape_string($conn, $_POST['education']);
+    $department = mysqli_real_escape_string($conn, $_POST['department']);
+
+    if (mysqli_query($conn, "INSERT INTO users VALUES(NULL, 'student', '$fname', '$mname', '$lname', '$username', '$password', '$email', '$mobile', '$address', '$city', '$pincode', '$filename', '$college', '$status', current_timestamp(), '$uniqid', '$education', '$department')")) {
+        echo "<script>alert('Teacher Added Successful!!!')</script>";
     } else {
-        echo "INSERT INTO college VALUES(NULL, '$name', '$username', '$password', '$email', '$mobile', '$address', '$city', '$pincode', '$filename', current_timestamp(), '$status')";
-        // echo "<script>alert('Error While Inserting into Database!!!')</script>";
+        echo "INSERT INTO users VALUES(NULL, 'teacher', '$fname', '$mname', '$lname', '$username', '$password', '$email', '$mobile', '$address', '$city', '$pincode', '$filename', '$college', '$status', current_timestamp(), '$uniqid', '$education', '$department')";
     }
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,7 +51,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New College</title>
+    <title>Dashboard</title>
 </head>
 
 <body>
@@ -61,10 +60,29 @@ if (isset($_POST['submit'])) {
     <!-- Main Content -->
     <div class="section">
         <form action="" method="post" enctype="multipart/form-data">
+            <!-- Name -->
             <div class="field">
-                <label class="label">Name</label>
+                <label class="label">First Name</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="text" name="name" placeholder="Enter College Name">
+                    <input class="input" type="text" name="fname" placeholder="Enter First Name">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Middle Name</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" name="mname" placeholder="Enter Middle Name">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Last Name</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" name="lname" placeholder="Enter Last Name">
                     <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                     </span>
@@ -142,9 +160,23 @@ if (isset($_POST['submit'])) {
             </div>
 
             <div class="field">
-                <label class="label">Logo</label>
+                <label class="label">Photo</label>
                 <div class="controls">
-                    <input type="file" name="logo" id="" accept="image/*">
+                    <input type="file" name="photo" id="" accept="image/*">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">College</label>
+                <div class="select">
+                    <select name="college" id="">
+                        <?php
+                        $query = mysqli_query($conn, "SELECT * FROM college WHERE `status`= 1 ORDER BY id DESC");
+                        while ($row = mysqli_fetch_assoc($query)) {
+                        ?>
+                            <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
             </div>
 
@@ -154,6 +186,34 @@ if (isset($_POST['submit'])) {
                     <select name="status" id="">
                         <option value="1">Activate</option>
                         <option value="0">Deactivate</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Education</label>
+                <div class="select">
+                    <select name="education" id="">
+                        <?php
+                        $query = mysqli_query($conn, "SELECT * FROM `education` WHERE `college_id`= 1");
+                        while ($row = mysqli_fetch_assoc($query)) {
+                        ?>
+                            <option value="<?php echo $row['education']; ?>"><?php echo $row['education']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Department</label>
+                <div class="select">
+                    <select name="department" id="">
+                        <?php
+                        $query = mysqli_query($conn, "SELECT * FROM `department` WHERE `college_id`= 1");
+                        while ($row = mysqli_fetch_assoc($query)) {
+                        ?>
+                            <option value="<?php echo $row['department']; ?>"><?php echo $row['department']; ?></option>
+                        <?php } ?>
                     </select>
                 </div>
             </div>

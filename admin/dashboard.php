@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect('localhost', 'root', '', 'college');
+$conn = mysqli_connect('localhost', 'root', '', 'collegeweb');
 $query = mysqli_query($conn, "SELECT help_category_id, COUNT(*) FROM help_topic GROUP BY help_category_id");
 
 $last_college = mysqli_query($conn, "SELECT * FROM college order by id desc LIMIT 3");
@@ -20,7 +20,7 @@ $last_student = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON u
 
 <body>
     <?php include_once 'header.php'; ?>
-    <br>
+    <br><br><br>
     <!-- Main Content -->
     <div class="container">
         <div class="columns is-multiline ">

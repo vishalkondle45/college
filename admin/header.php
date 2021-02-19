@@ -9,7 +9,7 @@
 <script defer src="../includes/js/module-chart.js"></script>
 
 <!-- Navigation Bar Starts -->
-<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+<nav class="navbar is-info is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
             <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
@@ -28,25 +28,26 @@
                 <i class="fa fa-dashboard"></i> &nbsp; Dashboard
             </a>
 
-            <a class="navbar-item">
+            <a class="navbar-item" href="new_college.php">
                 <i class="fa fa-plus"></i> &nbsp; New College
             </a>
-            <a class="navbar-item">
+            <a class="navbar-item" href="colleges.php">
                 <i class="fa fa-university"></i> &nbsp; Colleges
             </a>
-            <a class="navbar-item">
+            <a class="navbar-item" href="teachers.php">
                 <i class="fa fa-chalkboard-teacher"></i> &nbsp; Teachers
             </a>
-            <a class="navbar-item">
+            <a class="navbar-item" href="students.php">
                 <i class="fa fa-users"></i> &nbsp; Students
             </a>
         </div>
 
         <div class="navbar-end">
-            <a class="navbar-item">
+            <a class="navbar-item" href="logout.php">
                 <i class="fa fa-sign-out-alt"></i> &nbsp; Logout
             </a>
         </div>
     </div>
 </nav>
+<br><br>
 <!-- Navigation Bar Ends -->

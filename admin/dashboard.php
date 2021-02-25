@@ -3,8 +3,8 @@ $conn = mysqli_connect('localhost', 'root', '', 'collegeweb');
 $query = mysqli_query($conn, "SELECT help_category_id, COUNT(*) FROM help_topic GROUP BY help_category_id");
 
 $last_college = mysqli_query($conn, "SELECT * FROM college order by id desc LIMIT 3");
-$last_teacher = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `role`='teacher' ORDER BY users.id DESC LIMIT 3");
-$last_student = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `role`='student' ORDER BY users.id DESC LIMIT 3");
+$last_teacher = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `usertype`='teacher' ORDER BY users.id DESC LIMIT 3");
+$last_student = mysqli_query($conn, "SELECT * FROM users INNER JOIN college ON users.college_id=college.id WHERE `usertype`='student' ORDER BY users.id DESC LIMIT 3");
 
 ?>
 

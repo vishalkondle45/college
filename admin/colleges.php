@@ -13,6 +13,25 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
     <title>Colleges</title>
 </head>
 
+<style>
+    .image-cropper {
+        width: 50px;
+        height: 50px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+        border: solid 0.0002em black;
+    }
+
+    .profile-pic {
+        display: inline;
+        margin: 0 auto;
+        /* margin-left: 25%; */
+        /* height: 100%; */
+        width: auto;
+    }
+</style>
+
 <body>
     <?php include_once 'header.php'; ?>
     <br>
@@ -32,6 +51,7 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
                     <th>Pincode</th>
                     <th>Logo</th>
                     <th>Status</th>
+                    <th colspan="2" class="w3-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,8 +68,26 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
                         <td><?php echo $row['address'] ?></td>
                         <td><?php echo $row['city'] ?></td>
                         <td><?php echo $row['pincode'] ?></td>
-                        <td><?php echo $row['logo'] ?></td>
+                        <td>
+                            <div class="image-cropper">
+                                <img src="../media/logo/<?php echo $row['logo'] ?>" alt="avatar" class="profile-pic">
+                            </div>
+                        </td>
                         <td><?php echo $row['status'] ?></td>
+                        <td>
+                            <a href="edit.php?id=<?php echo $row['id'] ?>&user=college">
+                                <button class="button is-info">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="delete.php?id=<?php echo $row['id'] ?>&user=college">
+                                <button class="button is-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </a>
+                        </td>
                     </tr>
                 <?php } ?>
             </tbody>

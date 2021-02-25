@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
             <div class="field">
                 <label class="label">Username</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="text" name="username" placeholder="Enter Username">
+                    <input class="input" type="text" id="username" name="username" placeholder="Enter Username">
                     <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                     </span>
@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
             <div class="field">
                 <label class="label">Password</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="password" name="password" placeholder="Enter Password">
+                    <input class="input" type="password" id="password" name="password" placeholder="Enter Password">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="email" name="email" placeholder="Enter Email">
+                    <input class="input" type="email" id="email" name="email" placeholder="Enter Email">
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                     </span>
@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
             <div class="field">
                 <label class="label">Mobile</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="number" name="mobile" maxlength="10" minlength="10" placeholder="Enter Mobile Number">
+                    <input class="input" type="number" id="mobile" name="mobile" maxlength="10" minlength="10" placeholder="Enter Mobile Number">
                     <span class="icon is-small is-left">
                         <i class="fas fa-phone-alt"></i>
                     </span>
@@ -233,3 +233,94 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function() {
+        $("#username").change(function() {
+            var text = $("#username").val();
+            // alert(text);
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'check_username',
+                    text: text
+                },
+                success: function(data) {
+                    $("#username").val('');
+                    $("#username").attr('placeholder',
+                        data + " Already in Use!!");
+                    $("#username").addClass('is-danger');
+                    $("#username").focus();
+                }
+            });
+        });
+
+        $("#password").change(function() {
+            $("#password").each(function() {
+                var validated = true;
+                if (this.value.length < 8)
+                    validated = false;
+                if (!/\d/.test(this.value))
+                    validated = false;
+                if (!/[a-z]/.test(this.value))
+                    validated = false;
+                if (!/[A-Z]/.test(this.value))
+                    validated = false;
+                var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+                if (format.test(this.value)) {} else {
+                    validated = false;
+                }
+
+                if (!validated) {
+                    $("#password").val('');
+                    $("#password").attr('placeholder', "Password Must Be Strong!! Eg. 'Admin@123'");
+                    $("#password").addClass('is-danger');
+                    $("#password").focus();
+                } else {
+                    $("#password").removeClass('is-danger');
+                }
+            });
+        });
+
+        $("#email").change(function() {
+            var text = $("#email").val();
+            // alert(text);
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'check_email',
+                    text: text
+                },
+                success: function(data) {
+                    $("#email").val('');
+                    $("#email").attr('placeholder',
+                        data + " Already in Use!!");
+                    $("#email").addClass('is-danger');
+                    $("#email").focus();
+                }
+            });
+        });
+
+        $("#mobile").change(function() {
+            var text = $("#mobile").val();
+            // alert(text);
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'check_mobile',
+                    text: text
+                },
+                success: function(data) {
+                    $("#mobile").val('');
+                    $("#mobile").attr('placeholder',
+                        data + " Already in Use!!");
+                    $("#mobile").addClass('is-danger');
+                    $("#mobile").focus();
+                }
+            });
+        });
+    });
+</script>

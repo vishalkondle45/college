@@ -1,3 +1,6 @@
+<?php
+include_once 'session.php';
+?>
 <link rel="stylesheet" href="../includes/css/bulma.css">
 <link rel="stylesheet" href="../includes/css/w3.css">
 <script src="../includes/js/jquery.js"></script>

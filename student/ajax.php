@@ -100,5 +100,23 @@ if ($_POST['action'] == 'update') {
 
         header("Content-Type: application/json");
         echo json_encode($data);
+    } else {
+        echo false;
+    }
+}
+
+
+if ($_POST['action'] == 'upvote') {
+    $forum_id = $_POST['id'];
+    if (mysqli_query($conn, "INSERT INTO `upvote` VALUES(NULL, '$forum_id', '$userid', current_timestamp())")) {
+        echo true;
+    }
+}
+
+
+if ($_POST['action'] == 'follow') {
+    $id = $_POST['id'];
+    if (mysqli_query($conn, "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', current_timestamp())")) {
+        echo true;
     }
 }

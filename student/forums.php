@@ -1,5 +1,15 @@
 <?php
 include_once 'header.php';
+if (isset($_POST['submit'])) {
+    $forum = $_POST['topic'];
+    if (mysqli_query($conn, "INSERT INTO forums VALUES(NULL, '$userid', '$collegeid', '$forum', NULL)")) {
+        echo "<script>window.location='forums.php'</script>";
+    } else {
+        echo "INSERT INTO forums VALUES(NULL, '$userid', '$collegeid', '$forum', NULL)";
+        echo "<script>alert('Failure!!')</script>";
+        echo "<script>window.location='forums.php'</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +50,6 @@ include_once 'header.php';
         overflow: hidden;
         position: relative;
         display: inline-block;
-        text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -57,79 +66,64 @@ include_once 'header.php';
             </div>
             <input type="text" name="" class="w3-input w3-border" id="" placeholder="Search..">
             <ul class="w3-ul w3-border w3-white">
-                <li class="w3-bar">
-                    <div class="w3-bar-item w3-left">
-                        <a href="forum.php?">
-                            <span class="ellipsis">HTML Tutorial and Reference HTML Tutorial and Reference HTML Tutorial and Reference HTML Tutorial and Reference HTML Tutorial and Reference HTML Tutorial and Reference HTML Tutorial and Reference</span><br>
-                            <span class="w3-small w3-opacity">By kaijim, September 27, 2005</span>
-                        </a>
-                    </div>
-                    <div class="w3-bar-item w3-right">
-                        <a href="user.php?">
-                            <span class="">Ingolme</span>
-                        </a>
-                        <br>
-                        <span class="w3-small w3-opacity">February 6</span>
-                    </div>
-                    <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
-                        <div class="image-cropper is-48x48">
-                            <img src="../media/dp/090b9b6bb28ee515e10dc22177f6d54e.png" alt="" srcset="" class="profile-pic">
+                <?php
+                $forums = mysqli_query($conn, "SELECT * FROM forums WHERE college_id = '$collegeid'");
+                while ($row = mysqli_fetch_array($forums)) {
+                    $id = $row['user_id'];
+                    $forum_id = $row['id'];
+                    $user = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                    $row1 = mysqli_fetch_array($user);
+                    $replies = mysqli_query($conn, "SELECT * FROM forum_replies WHERE `forum_id`='$forum_id'");
+                    $views = mysqli_query($conn, "SELECT * FROM views WHERE `content_id`='$forum_id' AND `content`='forum'");
+                ?>
+                    <li class="w3-bar">
+                        <div class="w3-bar-item w3-left">
+                            <a href="forum.php?id=<?php echo $forum_id; ?>">
+                                <span class="ellipsis"><?php echo $row['forum']; ?></span><br>
+                                <span class="w3-small w3-opacity">By <?php echo $row1['username']; ?>, <?php echo $row['time']; ?></span>
+                            </a>
                         </div>
-                    </figure>
-                    <div class="w3-bar-item w3-right w3-border-right">
-                        <span class="">79 replies</span><br>
-                        <span class="w3-small w3-opacity">307.9k views</span>
-                    </div>
-                </li>
-                <li class="w3-bar">
-                    <div class="w3-bar-item w3-left">
-                        <a href="forum.php?">
-                            <span class="">HTML Tutorial and Reference</span><br>
-                            <span class="w3-small w3-opacity">By kaijim, September 27, 2005</span>
-                        </a>
-                    </div>
-                    <div class="w3-bar-item w3-right">
-                        <a href="user.php?">
-                            <span class="">Ingolme</span>
-                        </a>
-                        <br>
-                        <span class="w3-small w3-opacity">February 6</span>
-                    </div>
-                    <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
-                        <div class="image-cropper is-48x48">
-                            <img src="../media/dp/090b9b6bb28ee515e10dc22177f6d54e.png" alt="" srcset="" class="profile-pic">
+                        <div class="w3-bar-item w3-right">
+                            <a href="user.php?id=<?php echo $row1['unique_key']; ?>">
+                                <span class=""><?php echo $row1['username']; ?></span>
+                            </a>
+                            <br>
+                            <span class="w3-small w3-opacity"> <?php echo $row['time']; ?></span>
                         </div>
-                    </figure>
-                    <div class="w3-bar-item w3-right w3-border-right">
-                        <span class="">79 replies</span><br>
-                        <span class="w3-small w3-opacity">307.9k views</span>
-                    </div>
-                </li>
+                        <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
+                            <div class="image-cropper is-48x48">
+                                <img src="../media/dp/090b9b6bb28ee515e10dc22177f6d54e.png" alt="" srcset="" class="profile-pic">
+                            </div>
+                        </figure>
+                        <div class="w3-bar-item w3-right w3-border-right">
+                            <span class=""><?php echo mysqli_num_rows($replies); ?> replies</span><br>
+                            <span class="w3-small w3-opacity"><?php echo mysqli_num_rows($views); ?> views</span>
+                        </div>
+                    </li>
+                <?php } ?>
             </ul>
-
-
 
             <div class="modal">
                 <div class="modal-background"></div>
                 <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Start New Topic</p>
-                        <button class="delete" onclick="w3.toggleClass('.modal', 'is-active')" aria-label="close"></button>
-                    </header>
-                    <section class="modal-card-body">
-
-                        <div class="field">
-                            <label class="label">Topic</label>
-                            <div class="control">
-                                <textarea class="textarea" placeholder="Topic"></textarea>
+                    <form action="" method="post">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Start New Topic</p>
+                            <button class="delete" onclick="w3.toggleClass('.modal', 'is-active')" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">Topic</label>
+                                <div class="control">
+                                    <textarea class="textarea" name="topic" placeholder="Topic"></textarea>
+                                </div>
                             </div>
-                        </div>
-
-                    </section>
-                    <footer class="modal-card-foot">
-                        <button class="button is-success">Submit</button>
-                        <button class="button" onclick="w3.toggleClass('.modal', 'is-active')">Cancel</button>
-                    </footer>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button class="button is-success" name="submit">Submit</button>
+                            <button class="button" onclick="w3.toggleClass('.modal', 'is-active')">Cancel</button>
+                        </footer>
+                    </form>
                 </div>
             </div>
         </div>

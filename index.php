@@ -1,12 +1,8 @@
 <?php
 include_once 'includes/conn.php';
 session_start();
-$_SESSION['user'] = 'normal';
-if (isset($_POST['message'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $subject = mysqli_real_escape_string($conn, $_POST['subject']);
-    $message = mysqli_real_escape_string($conn, $_POST['message']);
-}
+
+// Login
 if (isset($_POST['login'])) {
     $usertype = mysqli_real_escape_string($conn, $_POST['usertype']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
@@ -18,6 +14,9 @@ if (isset($_POST['login'])) {
         $query = mysqli_query($conn, "SELECT * FROM `college` WHERE `username`='$username' AND `password`='$password'");
     elseif ($usertype == 'admin')
         $query = mysqli_query($conn, "SELECT * FROM `admin` WHERE `username`='$username' AND `password`='$password'");
+    else {
+        echo "<script>alert('Something Wrong'); window.location.href='index.php'</script>";
+    }
 
     if (mysqli_num_rows($query)) {
         $_SESSION['usertype'] = $_POST['usertype'];
@@ -27,6 +26,13 @@ if (isset($_POST['login'])) {
         echo "<script>window.location.href='$usertype/index.php'</script>";
     } else
         echo "<script>alert('Invalid Credentials!!!'); window.location.href='index.php'</script>";
+}
+
+// Message us
+if (isset($_POST['message'])) {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $subject = mysqli_real_escape_string($conn, $_POST['subject']);
+    $message = mysqli_real_escape_string($conn, $_POST['message']);
 }
 
 ?>

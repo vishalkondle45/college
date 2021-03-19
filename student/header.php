@@ -20,6 +20,11 @@ include_once 'session.php';
         overflow-x: hidden;
     }
 
+    a:hover {
+        text-decoration: none;
+        /* text-decoration-color: white; */
+    }
+
     ::-webkit-scrollbar {
         width: 0;
         /* Remove scrollbar space */
@@ -31,14 +36,38 @@ include_once 'session.php';
     ::-webkit-scrollbar-thumb {
         background: #FF0000;
     }
+
+    h1 {
+        font-size: 36px
+    }
+
+    h2 {
+        font-size: 30px
+    }
+
+    h3 {
+        font-size: 24px
+    }
+
+    h4 {
+        font-size: 20px
+    }
+
+    h5 {
+        font-size: 18px
+    }
+
+    h6 {
+        font-size: 16px
+    }
 </style>
 
 <!-- Navigation Bar Starts -->
 <nav class="navbar is-info is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="index.php">
+        <!-- <a class="navbar-item" href="index.php">
             <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-        </a>
+        </a> -->
         <a role="button" class="navbar-burger" aria-label="menu" onclick="w3.toggleClass('.navbar-menu','is-active')" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -81,13 +110,15 @@ include_once 'session.php';
                             Messaging
                         </b>
                     </a>
-                    <a class="navbar-item" href="notifications.php">
+                    <a class="navbar-item" href="profile.php">
                         <b>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                             </svg>
+
                             &nbsp;
-                            Notifications
+                            My Profile
                         </b>
                     </a>
                     <a class="navbar-item" href="forums.php">
@@ -151,3 +182,22 @@ include_once 'session.php';
 </nav>
 <!--  -->
 <!-- Navigation Bar Ends -->
+<script>
+    // $(document).keydown(function(event) {
+    //     if (event.keyCode == 123) { // Prevent F12
+    //         alert("F12 Key Prevented");
+    //         return false;
+    //     } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+    //         alert("Inspect Element Prevented");
+    //         return false;
+    //     }
+    // });
+    // $(document).on("contextmenu", function(e) {
+    //     e.preventDefault();
+    //     alert("Right Click Prevented");
+    // });
+
+    $(document).ready(function() {
+        $('img').attr('draggable', false);
+    });
+</script>

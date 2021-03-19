@@ -75,7 +75,7 @@ if (isset($_POST['post'])) {
                 </div>
             </article>
             <?php
-            $post = mysqli_query($conn, "SELECT * FROM posts order by id desc ");
+            $post = mysqli_query($conn, "SELECT * FROM posts order by id desc");
             while ($posts = mysqli_fetch_assoc($post)) {
                 $id = $posts['userid'];
                 $poster = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
@@ -95,7 +95,7 @@ if (isset($_POST['post'])) {
                                 <img src="../media/dp/<?php echo $poster['photo'] ?>" alt="" srcset="" class="profile-pic">
                             </div>
                         </div>
-                        <a href="vishalkondle45" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
+                        <a href="profile.php?user=<?php echo $poster['unique_key'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
                         <div class="level-right">
                             <div class="dropdown is-hoverable">
                                 <div class="dropdown-trigger">
@@ -131,17 +131,17 @@ if (isset($_POST['post'])) {
                         <br>
 
                         <!-- $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").removeClass("is-primary"); -->
-                        <!-- Like Comment Share Download -->
+                        <!-- Like Comment Share -->
                         <nav class="level is-mobile post_extensions">
                             <div class="level-left like_comment">
                                 <input type="hidden" name="" id="post_id" class="post_id" value="<?php echo $postid; ?>">
                                 <div class="level-item like_section">
                                     <div class="tags has-addons">
                                         <?php
-                                        $liked = mysqli_query($conn, "SELECT * FROM likes WHERE liker_id='$id' AND post_id='$postid'");
+                                        $liked = mysqli_query($conn, "SELECT * FROM likes WHERE liker_id='$userid' AND post_id='$postid'");
                                         if (mysqli_num_rows($liked) > 0) { ?>
                                             <span class="tag has-text-danger likes"><?php echo mysqli_num_rows($likes) ?></span>
-                                            <i class="fa fa-heart button like is-danger"></i>
+                                            <i class="fa fa-heart button unlike is-danger"></i>
                                         <?php
                                         } else {
                                         ?>
@@ -269,28 +269,30 @@ if (isset($_POST['post'])) {
                 },
                 success: function(data) {}
             });
-            var likes = $(this).siblings("span").text();
-            $(this).siblings("span").text(++likes);
-            $(this).siblings("span").removeClass('is-danger');
-            $(this).siblings("span").addClass('has-text-danger');
-            $(this).addClass('is-danger')
-            $(this).removeClass('has-text-danger')
+            // var likes = $(this).siblings("span").text();
+            // $(this).siblings("span").text(++likes);
+            // $(this).siblings("span").removeClass('is-danger');
+            // $(this).siblings("span").addClass('has-text-danger');
+            // $(this).addClass('is-danger');
+            // $(this).removeClass('has-text-danger');
+            location.reload();
         });
 
-        // $(".unlike").click(function() {
-        //     var post_id = $(this).parent().parent().siblings(".post_id").val();
-        //     $.ajax({
-        //         url: "ajax.php",
-        //         type: "POST",
-        //         data: {
-        //             action: 'unlike',
-        //             post_id: post_id
-        //         },
-        //         success: function(data) {}
-        //     });
-        //     var likes = $(this).siblings("span").text();
-        //     $(this).siblings("span").text(--likes);
-        // });
+        $(".unlike").click(function() {
+            var post_id = $(this).parent().parent().siblings(".post_id").val();
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'unlike',
+                    post_id: post_id
+                },
+                success: function(data) {}
+            });
+            // var likes = $(this).siblings("span").text();
+            // $(this).siblings("span").text(--likes);
+            location.reload();
+        });
 
         $('.comment_box').keypress(function(event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -314,6 +316,7 @@ if (isset($_POST['post'])) {
                 $(this).val('');
                 var comments = $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").text();
                 $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").text(++comments);
+                location.reload();
             }
         });
 

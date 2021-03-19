@@ -110,12 +110,12 @@ if (isset($_POST['reply'])) {
                         $user_id = $row3['id'];
                         $query5 = mysqli_query($conn, "SELECT * FROM upvote WHERE reply_id='$reply_id' AND `user_id`='$userid'");
                         $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$user_id' AND `following`='$userid'");
-
+                        $query7 = mysqli_query($conn, "SELECT * FROM `upvote` WHERE reply_id = '$reply_id'");
                         if (mysqli_num_rows($query5) == 0) { ?>
-                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote</button>
+                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag"><?php echo mysqli_num_rows($query7) ?> </button>
                         <?php
                         } else { ?>
-                            <button class="button is-success is-outlined" disabled> Upvoted</button>
+                            <button class="button is-success is-outlined downvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvoted &emsp; <span class="tag is-success"><?php echo mysqli_num_rows($query7) ?></span> </button>
                         <?php
                         }
                         ?>
@@ -154,9 +154,21 @@ if (isset($_POST['reply'])) {
                 },
                 success: function(data) {}
             })
-            $(this).addClass("is-outlined");
-            $(this).text('Upvoted');
-            $(this).attr("disabled", true);
+            location.reload();
+        });
+
+        $(".downvote").click(function() {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'downvote',
+                    id: id
+                },
+                success: function(data) {}
+            })
+            location.reload();
         });
 
         $(".follow").click(function() {

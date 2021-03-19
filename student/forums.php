@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
                             </a>
                         </div>
                         <div class="w3-bar-item w3-right">
-                            <a href="user.php?id=<?php echo $row1['unique_key']; ?>">
+                            <a href="profile.php?user=<?php echo $row1['unique_key']; ?>">
                                 <span class=""><?php echo $row1['username']; ?></span>
                             </a>
                             <br>

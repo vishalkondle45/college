@@ -113,30 +113,52 @@ if (isset($_GET['user'])) {
                     <input type="hidden" name="" id="receiver" value="<?php echo $_SESSION['chat_user_id']; ?>">
                     <input type="hidden" name="" id="sender" value="<?php echo $_SESSION['userid']; ?>">
                     <br>
-                    <center>
-                        <p class="w3-border w3-round w3-light-blue w3-container" style="width: max-content">Messages are Deleted after 24 Hours</p>
-                    </center>
                     <?php
                     $query = mysqli_query($conn, "SELECT * FROM `message` WHERE (sender='$userid' && receiver='$receiver') || (sender='$receiver' && receiver='$userid')");
                     $query2 = mysqli_query($conn, "SELECT * FROM `message` WHERE (sender='$userid' && receiver='$receiver') || (sender='$receiver' && receiver='$userid') ORDER BY id DESC LIMIT 1");
                     $row2 = mysqli_fetch_array($query2);
+                    $last_date = 0;
                     while ($row = mysqli_fetch_array($query)) {
-                        if ($row['receiver'] == $userid) {
-                            // $sender = $row['sender'];
-                            // $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$sender'");
-                            // $row1 = mysqli_fetch_array($query1);
+
+                        // Last Message time
+                        $lm = $row['time'];
+                        $lm = strtotime($lm);
+                        $show_time = date("h:i", $lm);
+                        $lm = date("d-m-Y", $lm);
+
+                        if ($lm != $last_date) {
+                            $today = date("d-m-Y", time());
+                            if ($today == $lm) {
                     ?>
-                            <div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $row['time']; ?></span></div>
-                        <?php } else {
-                            // $receiver = $row['sender'];
-                            // $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$receiver'");
-                            // $row1 = mysqli_fetch_array($query1);
+                                <center>
+                                    <br>
+                                    <p class="w3-border w3-round w3-light-blue w3-container" style="width: max-content"><?php echo "Today"; ?></p>
+                                </center>
+                            <?php
+                            } else {
+                            ?>
+                                <center>
+                                    <br>
+                                    <p class="w3-border w3-round w3-light-blue w3-container" style="width: max-content"><?php echo $lm; ?></p>
+                                </center>
+                        <?php
+                            }
+                        }
                         ?>
-                            <div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $row['time']; ?></span></div>
+
+                        <?php
+                        if ($row['receiver'] == $userid) {
+                        ?>
+                            <div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $show_time; ?></span></div>
+                        <?php } else {
+                        ?>
+                            <div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $show_time; ?></span></div>
                         <?php
                         }
                         ?>
                     <?php
+
+                        $last_date = $lm;
                     }
                     ?>
                     <span id="last_message" style="display: none"><?php echo $row2['id'] ?></span>

@@ -38,8 +38,12 @@ if ($_POST['action'] == 'message') {
         $sender_id = $row1['id'];
         $sender_photo = $row1['photo'];
 
+        $lm = $row['time'];
+        $lm = strtotime($lm);
+        $show_time = date("h:i", $lm);
+
         if ($row['sender'] == $sender) {
-            echo '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">time</span></div>';
+            echo '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $show_time . '</span></div>';
         }
     }
 }
@@ -67,10 +71,14 @@ if ($_POST['action'] == 'update') {
         $sender_id = $row1['id'];
         $sender_photo = $row1['photo'];
 
+        $lm = $row['time'];
+        $lm = strtotime($lm);
+        $show_time = date("h:i", $lm);
+
         if ($row['sender'] == $sender) {
-            $message =  '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $row['time'] . '</span></div>';
+            $message =  '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $show_time . '</span></div>';
         } else {
-            $message = '<div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $row['time'] . '</span></div>';
+            $message = '<div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $show_time . '</span></div>';
         }
 
         $data = array();
@@ -94,10 +102,37 @@ if ($_POST['action'] == 'upvote') {
     }
 }
 
+if ($_POST['action'] == 'downvote') {
+    $forum_id = $_POST['id'];
+    if (mysqli_query($conn, "DELETE FROM `upvote` WHERE `reply_id`='$forum_id' AND `user_id`='$userid'")) {
+        echo true;
+    }
+}
+
 
 if ($_POST['action'] == 'follow') {
     $id = $_POST['id'];
-    if (mysqli_query($conn, "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', current_timestamp())")) {
+    if (mysqli_query($conn, "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', '', current_timestamp())")) {
         echo true;
+    } else {
+        echo "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', '', current_timestamp())";
+    }
+}
+
+if ($_POST['action'] == 'cancel') {
+    $id = $_POST['id'];
+    if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
+        echo true;
+    } else {
+        echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
+    }
+}
+
+if ($_POST['action'] == 'unfollow') {
+    $id = $_POST['id'];
+    if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
+        echo true;
+    } else {
+        echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
     }
 }

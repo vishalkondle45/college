@@ -1,5 +1,6 @@
 <?php
 include_once 'header.php';
+// echo current_timestamp();
 if ((!isset($_GET['id'])) || $_GET['id'] == '') {
     echo "<script>alert('You Are Not Authorized for this forum'); window.location='forums.php'</script>";
 }
@@ -13,6 +14,15 @@ if (isset($_GET['id'])) {
     $id = $row['user_id'];
     $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$id'");
     $row1 = mysqli_fetch_array($query1);
+}
+if (isset($_POST['reply'])) {
+    $reply_text = nl2br($_POST['reply_text']);
+    // echo "<script>alert('Hello')</script>";
+    if (mysqli_query($conn, "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$userid', '$reply_text', current_timestamp())")) {
+        echo "<script>window.location.href='forum.php?id=" . $forum_id . "'</script>";
+    } else {
+        echo "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$userid', '$reply_text', current_timestamp())";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -51,7 +61,7 @@ if (isset($_GET['id'])) {
     <div class="columns section">
         <div class="column is-1"></div>
         <div class="column is-10">
-            <div class="w3-container w3-border w3-white">
+            <div class="w3-container w3-white w3-leftbar w3-border-red">
                 <p class="w3-xlarge"><?php echo $row['forum']; ?></p>
                 <hr class="style1">
                 <div class="w3-bar" style="margin:0;">
@@ -61,7 +71,7 @@ if (isset($_GET['id'])) {
                         </div>
                     </figure>
                     <div class="w3-bar-item" style="margin:0;">
-                        <a href="user.php?">
+                        <a href="user.php?key=<?php echo $row1['unique_key']; ?>">
                             <b><span class="">By <?php echo $row1['username']; ?></span></b>
                         </a>
                         <br>
@@ -69,34 +79,22 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="w3-bar-item w3-right" style="margin:0;">
                         <a class="button is-info" href="#reply"> <i class="fa fa-reply"></i> &nbsp; Reply</a>
-                        &emsp13;
-                        <?php
-                        $user_id = $row3['id'];
-                        $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$user_id' AND `following`='$userid'");
-
-                        if (mysqli_num_rows($query5) == 0) { ?>
-                            <button class="button is-info w3-right w3-hide-small follow" id="<?php echo $row1['id']; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow</button>
-                        <?php
-                        } else { ?>
-                            <button class="button is-success is-outlined" disabled> Upvoted</button>
-                        <?php
-                        } ?>
                     </div>
                 </div>
             </div>
-            <br><br>
+            <hr class="w3-black">
             <?php
-            $query2 = mysqli_query($conn, "SELECT * FROM `forum_replies` WHERE `id`='$forum_id'");
+            $query2 = mysqli_query($conn, "SELECT * FROM `forum_replies` WHERE `forum_id`='$forum_id'");
             while ($row2 = mysqli_fetch_array($query2)) {
                 $replier_id = $row2['replier_id'];
                 $query3 = mysqli_query($conn, "SELECT * FROM `users` WHERE `id`='$replier_id'");
                 $row3 = mysqli_fetch_array($query3);
                 $query4 = mysqli_query($conn, "SELECT * FROM `forums` WHERE `user_id`='$replier_id'");
             ?>
-                <div class="w3-row w3-white w3-container w3-padding w3-border w3-responsive">
+                <div class="w3-row w3-white w3-container w3-padding w3-leftbar w3-border-blue w3-responsive">
                     <div class="w3-col w3-center w3-border-right w3-hide-small" style="width:10%;">
                         <b>
-                            <p class=""><?php echo $row3['username'] ?></p>
+                            <a class="" href="user.php?key=<?php echo $row1['unique_key']; ?>"><?php echo $row3['username'] ?></a>
                         </b>
                         <p class=""><?php echo $row3['usertype'] ?></p>
                         <br>
@@ -105,7 +103,7 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="w3-col w3-container" style="width:90%;">
                         <span class="w3-right w3-opacity w3-small">Posted on <?php echo $row2['time'] ?></span>
-                        <span class="w3-responsive"><?php echo $row2['reply'] ?></span>
+                        <span class="w3-responsive w3-padding"><?php echo $row2['reply'] ?></span>
                         <hr>
                         <?php
                         $reply_id = $row2['id'];
@@ -120,28 +118,21 @@ if (isset($_GET['id'])) {
                             <button class="button is-success is-outlined" disabled> Upvoted</button>
                         <?php
                         }
-                        if (mysqli_num_rows($query6) == 0) { ?>
-                            <button class="button is-info w3-right w3-hide-small follow" id="<?php echo $row3['id']; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow</button>
-                        <?php
-                        } else { ?>
-                            <button class="button w3-right is-info is-outlined unfollow" id="<?php echo $row3['id']; ?>"> Following</button>
-                        <?php
-                        }
                         ?>
                     </div>
                 </div>
+                <br>
             <?php } ?>
             <br><br><br><br><br><br><br><br><br><br><br>
             <div class="w3-white w3-container w3-padding w3-border w3-responsive" id="reply">
-                <p class="w3-xlarge"><b>Join the Conversation</b></p>
-                <hr>
-                <textarea name="" class="w3-input w3-border" id="" cols="30" rows="10" placeholder="Reply Here.."></textarea>
-                <br>
-                <center>
-                    <button class="button is-success">Reply</button>
-                </center>
+                <form action="" method="post">
+                    <p class="w3-xlarge"><b>Join the Conversation</b></p>
+                    <hr>
+                    <textarea name="reply_text" class="w3-input w3-border" id="" cols="30" rows="10" placeholder="Reply Here.."></textarea><br>
+                    <center><button class="button is-success" name="reply">Reply</button></center>
+                </form>
             </div>
-            <br><br><br><br><br><br><br>
+            <br><br><br><br><br><br>
         </div>
         <div class=" column is-1"></div>
 

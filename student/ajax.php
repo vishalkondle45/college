@@ -38,15 +38,8 @@ if ($_POST['action'] == 'message') {
         $sender_id = $row1['id'];
         $sender_photo = $row1['photo'];
 
-
         if ($row['sender'] == $sender) {
-            echo '<div class="w3-border w3-green w3-container w3-margin" style="width:90%;" id="sent">
-                            <p class="w3-bar">
-                                <img src="../media/dp/' . $sender_photo . '>" class="img-responsive img-circle w3-bar-item w3-right is-hidden-mobile" style="width:75px" alt="" srcset="">
-                                <span class="w3-bar-item" style="width:91%">' . $message . '</span>
-                            </p>
-                            <span class="w3-left w3-margin-bottom w3-small">' . $time . '</span>
-                        </div>';
+            echo '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">time</span></div>';
         }
     }
 }
@@ -75,21 +68,9 @@ if ($_POST['action'] == 'update') {
         $sender_photo = $row1['photo'];
 
         if ($row['sender'] == $sender) {
-            $message =  '  <div class="w3-border w3-green w3-container w3-margin" style="width:90%;" id="sent">
-                    <p class="w3-bar">
-                        <img src="../media/dp/' . $sender_photo . '>" class="img-responsive img-circle w3-bar-item w3-right is-hidden-mobile" style="width:75px" alt="" srcset="">
-                        <span class="w3-bar-item" style="width:91%">' . $message . '</span>
-                    </p>
-                    <span class="w3-left w3-margin-bottom w3-small">' . $time . '</span>
-                </div>';
+            $message =  '<div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $row['time'] . '</span></div>';
         } else {
-            $message = '  <div class="w3-border w3-light-grey w3-container w3-margin" style="width:90%;" id="received">
-                    <p class="w3-bar">
-                        <img src="../media/dp/' . $sender_photo . '" class="img-responsive img-circle w3-bar-item is-hidden-mobile" style="width:75px" alt="" srcset="">
-                        <span class="w3-bar-item" style="width:91%">' . $message . '</span>
-                    </p>
-                    <span class="w3-right w3-margin-bottom w3-small">' . $time . '</span>
-                </div>';
+            $message = '<div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px">' . $row['message'] . '<span class="w3-right w3-opacity w3-small">' . $row['time'] . '</span></div>';
         }
 
         $data = array();

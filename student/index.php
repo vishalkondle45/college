@@ -17,7 +17,7 @@ if (isset($_POST['post'])) {
     $key = md5(time() + 3);
     $caption = nl2br($_POST['caption']);
     if (mysqli_query($conn, "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$filename', '$caption', '$key', NULL)")) {
-        echo "<script>alert('Success')</script>";
+        echo "<script>location.href='index.php'</script>";
     } else {
         echo "<script>alert('Failure')</script>";
         echo "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$filename', '$caption', '$key', NULL)";
@@ -56,40 +56,6 @@ if (isset($_POST['post'])) {
     <br>
     <div class="columns section">
         <div class="column is-3">
-            <!-- <aside class="menu is-fullheight is-narrow-mobile">
-                <p class="menu-label">
-                    General
-                </p>
-                <ul class="menu-list">
-                    <li><a>Dashboard</a></li>
-                    <li><a>Customers</a></li>
-                </ul>
-                <p class="menu-label">
-                    Administration
-                </p>
-                <ul class="menu-list">
-                    <li><a>Team Settings</a></li>
-                    <li>
-                        <a class="is-active">Manage Your Team</a>
-                        <ul>
-                            <li><a>Members</a></li>
-                            <li><a>Plugins</a></li>
-                            <li><a>Add a member</a></li>
-                        </ul>
-                    </li>
-                    <li><a>Invitations</a></li>
-                    <li><a>Cloud Storage Environment Settings</a></li>
-                    <li><a>Authentication</a></li>
-                </ul>
-                <p class="menu-label">
-                    Transactions
-                </p>
-                <ul class="menu-list">
-                    <li><a>Payments</a></li>
-                    <li><a>Transfers</a></li>
-                    <li><a>Balance</a></li>
-                </ul>
-            </aside> -->
         </div>
         <div class="column is-6 is-info">
             <article class="message is-primary">
@@ -103,14 +69,13 @@ if (isset($_POST['post'])) {
                     <form action="" method="post" enctype="multipart/form-data">
                         <textarea name="caption" id="" placeholder="Caption" class="textarea" cols="30" rows="2"></textarea>
                         <br />
-                        <input type="file" name="file" id="">
-                        <button class="button is-info w3-right" name="post"><i class="fa fa-pen"></i>&nbsp;Post</button>
+                        <input type="file" name="file" id="" required>
+                        <button class="button is-primary w3-right" name="post"><i class="fa fa-pen"></i>&nbsp;Post</button>
                     </form>
                 </div>
             </article>
             <?php
-            // $a = 0;
-            $post = mysqli_query($conn, "SELECT * FROM posts");
+            $post = mysqli_query($conn, "SELECT * FROM posts order by id desc ");
             while ($posts = mysqli_fetch_assoc($post)) {
                 $id = $posts['userid'];
                 $poster = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");

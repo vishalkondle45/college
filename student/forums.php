@@ -65,7 +65,7 @@ if (isset($_POST['submit'])) {
                 <button class="w3-bar-item w3-right button is-info" id="new_topic">Start new topic</button>
             </div>
             <input type="text" name="" class="w3-input w3-border" id="" placeholder="Search..">
-            <ul class="w3-ul w3-border w3-white">
+            <ul class="w3-ul w3-white w3-leftbar w3-border-red">
                 <?php
                 $forums = mysqli_query($conn, "SELECT * FROM forums WHERE college_id = '$collegeid'");
                 while ($row = mysqli_fetch_array($forums)) {
@@ -76,10 +76,10 @@ if (isset($_POST['submit'])) {
                     $replies = mysqli_query($conn, "SELECT * FROM forum_replies WHERE `forum_id`='$forum_id'");
                     $views = mysqli_query($conn, "SELECT * FROM views WHERE `content_id`='$forum_id' AND `content`='forum'");
                 ?>
-                    <li class="w3-bar">
+                    <li class="w3-bar w3-border-right w3-border-right">
                         <div class="w3-bar-item w3-left">
-                            <a href="forum.php?id=<?php echo $forum_id; ?>">
-                                <span class="ellipsis"><?php echo $row['forum']; ?></span><br>
+                            <a href="forum.php?id=<?php echo $forum_id; ?>" style="text-decoration: none; color:black;">
+                                <span class="ellipsis w3-large"><?php echo $row['forum']; ?></span><br>
                                 <span class="w3-small w3-opacity">By <?php echo $row1['username']; ?>, <?php echo $row['time']; ?></span>
                             </a>
                         </div>

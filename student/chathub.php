@@ -65,18 +65,24 @@ if (isset($_GET['user'])) {
                     $row3 = mysqli_fetch_assoc($query3);
                     if (mysqli_num_rows($query3)) {
                         $show = $row3['message'];
+                        $time = $row3['time'];
+
+                        $time = strtotime($time);             // returns bool(false)
+
+                        $time = date('H:i', $time);   // returns 1970-01-01 00:00:00
+
                     } else {
                         $show = $row['fname'] . ' ' . $row['lname'];
+                        $time = "";
                     }
                 ?>
                     <a href="chathub.php?user=<?php echo $row['unique_key']; ?>">
                         <li class="w3-bar w3-border">
                             <img src="../media/dp/<?php echo $row['photo']; ?>" class="w3-image w3-circle w3-left" width="65" height="65">
-                            <span class="w3-right w3-margin w3-small w3-text-black is-hidden-mobile">14:20</span>
-                            <!-- <span class="w3-badge w3-green w3-right w3-margin is-hidden-mobile">1</span> -->
+                            <span class="w3-right w3-margin w3-small w3-text-black is-hidden-mobile"><?php echo $time; ?></span>
                             <div class="w3-bar-item is-hidden-mobile w3-margin-right">
-                                <span class="w3-large w3-text-black"><?php echo $row['username']; ?></span><br>
-                                <span class="w3-text-black"><?php echo $show; ?></span>
+                                <span class="w3-large w3-text-black"><?php echo $row['username']; ?></span>
+                                <p class="w3-text-black" style="white-space: nowrap; width: 160px; overflow: hidden; text-overflow: ellipsis;"><?php echo $show; ?></p>
                             </div>
                         </li>
                     </a>
@@ -92,7 +98,6 @@ if (isset($_GET['user'])) {
             ?>
                 <ul class="w3-ul w3-border-bottom w3-light-grey">
                     <li class="w3-bar">
-                        <!-- <img src="../media/dp/<?php echo $row1['photo']; ?>" class="w3-bar-item img-responsive img-circle" style="width:75px"> -->
                         <figure class="w3-bar-item media-left">
                             <div class="image-cropper is-48x48">
                                 <img src="../media/dp/<?php echo $row1['photo'] ?>" alt="" srcset="" class="profile-pic">
@@ -104,12 +109,12 @@ if (isset($_GET['user'])) {
                         </div>
                     </li>
                 </ul>
-                <div class="w3-border" style="height:504px; overflow-y:scroll;" id="messages">
+                <div class="w3-border w3-container" style="height:504px; overflow-y:scroll;" id="messages">
                     <input type="hidden" name="" id="receiver" value="<?php echo $_SESSION['chat_user_id']; ?>">
                     <input type="hidden" name="" id="sender" value="<?php echo $_SESSION['userid']; ?>">
                     <br>
                     <center>
-                        <p class="w3-border w3-round w3-light-blue" style="width: max-content">14/02/2021</p>
+                        <p class="w3-border w3-round w3-light-blue w3-container" style="width: max-content">Messages are Deleted after 24 Hours</p>
                     </center>
                     <?php
                     $query = mysqli_query($conn, "SELECT * FROM `message` WHERE (sender='$userid' && receiver='$receiver') || (sender='$receiver' && receiver='$userid')");
@@ -117,30 +122,17 @@ if (isset($_GET['user'])) {
                     $row2 = mysqli_fetch_array($query2);
                     while ($row = mysqli_fetch_array($query)) {
                         if ($row['receiver'] == $userid) {
-                            $sender = $row['sender'];
-                            $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$sender'");
-                            $row1 = mysqli_fetch_array($query1);
+                            // $sender = $row['sender'];
+                            // $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$sender'");
+                            // $row1 = mysqli_fetch_array($query1);
                     ?>
-                            <div class="w3-border w3-light-grey w3-container w3-margin" style="width:90%;" id="received">
-                                <p class="w3-bar">
-                                    <img src="../media/dp/<?php echo $row1['photo']; ?>" class="img-responsive img-circle w3-bar-item is-hidden-mobile" style="width:75px" alt="" srcset="">
-                                    <span class="w3-bar-item" style="width:91%"><?php echo $row['message']; ?></span>
-                                </p>
-                                <span class="w3-right w3-margin-bottom w3-small"><?php echo $row['time']; ?></span>
-                            </div>
+                            <div class="w3-leftbar w3-border-blue w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $row['time']; ?></span></div>
                         <?php } else {
-                            $receiver = $row['receiver'];
-                            $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$receiver'");
-                            $row1 = mysqli_fetch_array($query1);
+                            // $receiver = $row['sender'];
+                            // $query1 = mysqli_query($conn, "SELECT * FROM users WHERE id='$receiver'");
+                            // $row1 = mysqli_fetch_array($query1);
                         ?>
-                            <div class="w3-border w3-green w3-container w3-margin" style="width:90%;" id="sent">
-                                <p class="w3-bar">
-                                    <img src="../media/dp/<?php echo $row1['photo']; ?>" class="img-responsive img-circle w3-bar-item w3-right is-hidden-mobile" style="width:75px" alt="" srcset="">
-                                    <span class="w3-bar-item" style="width:91%"><?php echo $row['message']; ?></span>
-                                </p>
-                                <span class="w3-left w3-margin-bottom w3-small"><?php echo $row['time']; ?></span>
-                            </div>
-                            <!-- <hr> -->
+                            <div class="w3-leftbar w3-border-green w3-container" style="margin-bottom: 10px;"><?php echo $row['message']; ?> <span class="w3-right w3-opacity w3-small"><?php echo $row['time']; ?></span></div>
                         <?php
                         }
                         ?>

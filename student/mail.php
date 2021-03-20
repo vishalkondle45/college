@@ -106,8 +106,8 @@ if (isset($_GET['id'])) {
                 &emsp;
                 <a href="compose.php?b=<?php echo $row['body'] ?>&s=<?php echo "[Forward] " .  $row['subject'] ?>" class="w3-button w3-white w3-border w3-border-green w3-hover-green"><i class="fa fa-share"></i> Forward</a>
             </div>
+            <br>
         </div>
-
     </div>
 
 </body>

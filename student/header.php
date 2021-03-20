@@ -10,6 +10,7 @@ include_once 'session.php';
 <script src="../includes/js/w3.js"></script>
 <script src="../includes/js/w3data.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+<link rel="stylesheet" href="../includes/css/quill.snow.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.22.0/apexcharts.min.js"></script>
 <script defer src="../includes/js/module-chart.js"></script>
 <script src="../includes/js/bootstrap.bundle.js"></script>

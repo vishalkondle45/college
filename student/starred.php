@@ -26,8 +26,8 @@ include_once 'session.php';
             <p class="w3-bar-item menu-label"><span class="hidethis">vishal.kondle@gmail.com</span></p>
             <hr>
             <a href="compose.php" class="w3-bar-item w3-button"><i class="fa fa-plus-circle"></i> <span class="hidethis">Compose</span></a>
-            <a href="inbox.php" class="w3-bar-item w3-button w3-grey"><i class="fa fa-envelope"></i> <span class="hidethis">Inbox</span></a>
-            <a href="starred.php" class="w3-bar-item w3-button"><i class="fa fa-star"></i> <span class="hidethis">Starred</span></a>
+            <a href="inbox.php" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> <span class="hidethis">Inbox</span></a>
+            <a href="starred.php" class="w3-bar-item w3-button w3-grey"><i class="fa fa-star"></i> <span class="hidethis">Starred</span></a>
             <a href="sent.php" class="w3-bar-item w3-button"><i class="fa fa-paper-plane"></i> <span class="hidethis">Sent</span></a>
         </div>
         <div style="margin-left:15%; height:640px; overflow-y: scroll;" class="w3-light-grey w3-border">
@@ -49,6 +49,9 @@ include_once 'session.php';
                     $query = mysqli_query($conn, "SELECT * FROM inbox WHERE receiver='$email'");
                     while ($row = mysqli_fetch_array($query)) {
                         $mail_id = $row['id'];
+                        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM starred WHERE mail_id='$mail_id' AND user_id='$userid'")) == 0) {
+                            continue;
+                        }
                     ?>
                         <tr class="item">
                             <th><?php echo $row['id'] ?></th>
@@ -89,14 +92,7 @@ include_once 'session.php';
                     id: id
                 },
                 success: function(data) {
-                    if (data == 'star') {
-                        t.removeClass("far");
-                        t.addClass("fas")
-                    }
-                    if (data == 'unstar') {
-                        t.removeClass("fas");
-                        t.addClass("far")
-                    }
+                    t.parent().parent("tr").hide();
                 }
             })
         });

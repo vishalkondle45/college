@@ -30,10 +30,6 @@ if (isset($_GET['user'])) {
         background-image: url("../media/wallpaper/wallpaper1.webp");
     }
 
-    #messages {
-        /* background-image: url("../media/wallpaper/2.jpg"); */
-    }
-
     @media only screen and (max-width: 1026px) {
         .hidethis {
             display: none;

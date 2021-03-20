@@ -169,3 +169,17 @@ if ($_POST['action'] == 'star') {
         }
     }
 }
+
+if ($_POST['action'] == 'compose') {
+
+    $to = $_POST['to'];
+    $subject = $_POST['subject'];
+    $body = $_POST['body'];
+
+    if (mysqli_query($conn, "INSERT INTO inbox VALUES(NULL, '$email', '$to', '$subject', '$body', current_timestamp())")) {
+        echo "Successful";
+    } else {
+        echo "sorry";
+    }
+    // echo "<script>window.location.href='inbox1.php'</script>";
+}

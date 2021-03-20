@@ -8,6 +8,8 @@ $collegeid = $_SESSION['collegeid'] = 1;
 $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$userid'");
 $user_row = mysqli_fetch_assoc($query1);
 $user_key = $user_row['unique_key'];
+$email = $user_row['email'];
+$flname = $user_row['fname'] . ' ' . $user_row['lname'];
 
 $query2 = mysqli_query($conn, "SELECT * FROM college WHERE `id`='$collegeid'");
 $college_row = mysqli_fetch_assoc($query2);

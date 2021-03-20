@@ -1,6 +1,7 @@
 <?php
 include_once 'header.php';
 include_once 'session.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +12,6 @@ include_once 'session.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mail</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <style>
     body {
@@ -26,7 +26,7 @@ include_once 'session.php';
         <div class="w3-sidebar w3-white w3-bar-block w3-border" style="width:15%; height:640px;">
             <p class="w3-bar-item menu-label"><span class="hidethis">vishal.kondle@gmail.com</span></p>
             <hr>
-            <a href="compose.php" class="w3-bar-item w3-button"><i class="fa fa-plus-circle"></i> <span class="hidethis">Compose</span></a>
+            <a href="compose.php" class="w3-bar-item w3-button w3-grey"><i class="fa fa-plus-circle"></i> <span class="hidethis">Compose</span></a>
             <a href="mail.php" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> <span class="hidethis">Inbox</span></a>
             <a href="starred.php" class="w3-bar-item w3-button"><i class="fa fa-star"></i> <span class="hidethis">Starred</span></a>
             <a href="sent.php" class="w3-bar-item w3-button"><i class="fa fa-paper-plane"></i> <span class="hidethis">Sent</span></a>
@@ -56,17 +56,20 @@ include_once 'session.php';
                     ?>
             </datalist>
 
-            <!-- To -->
-            <input type="text" id="to" list="list" class="w3-input w3-white" placeholder="To.."><br>
+            <form>
+                <!-- To -->
+                <input type="text" id="to" name="to" list="list" class="w3-input w3-white" placeholder="To.."><br>
 
-            <input type="text" class="w3-input w3-white" id="subject" placeholder="Subject.."><br>
-            <!-- Body -->
-            <div id="editor" style="height:300px">
-                <br><br><br><br><br><br>Yours Sincerely <br>
-                <b>Vishal Kondle</b>
-            </div>
-            <br>
-            <button class="w3-btn w3-block w3-green">Send <i class="fa fa-paper-plane"></i></button>
+                <input type="text" id="subject" name="subject" class="w3-input w3-white" placeholder="Subject.."><br>
+                <!-- Body -->
+                <div id="editor" style="height:300px">
+                    <br><br><br>Yours Sincerely <br>
+                    <b><?php echo $flname; ?></b>
+                </div>
+                <br>
+                <button class="w3-btn w3-block w3-green" name="compose" id="submit">Send <i class="fa fa-paper-plane"></i></button>
+            </form>
+
         </div>
     </div>
 
@@ -76,12 +79,59 @@ include_once 'session.php';
 
 <script>
     $(document).ready(function() {
+
+        // Getting Parameters Function
         $.urlParam = function(name) {
             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            return results[1] || 0;
+            if (results == null) {
+                return null;
+            }
+            return decodeURI(results[1]) || 0;
         }
-        $('#to').val(decodeURIComponent($.urlParam('email')));
-        $('#subject').val("[Reply] " + decodeURIComponent($.urlParam('subject')));
+
+        if ($.urlParam('b') == null || $.urlParam('b') == '') {
+            $(".ql-editor").html("<br><br><br>Yours Sincerely<b>Vishal Kondle</b>");
+        } else {
+            $(".ql-editor").html($.urlParam('b'));
+        }
+
+        if ($.urlParam('e') == null || $.urlParam('e') == '') {
+            $("#to").val("");
+        } else {
+            $("#to").val($.urlParam('e'));
+        }
+
+        if ($.urlParam('s') == null || $.urlParam('s') == '') {
+            $("#subject").val("");
+        } else {
+            $("#subject").val($.urlParam('s'));
+        }
+
+
+        $("#submit").click(function(event) {
+            var to = $("#to").val();
+            var subject = $("#subject").val();
+            var body = $(".ql-editor").html();
+
+            if (to != '' || subject != '' || body != '') {
+                $.ajax({
+                    url: 'ajax.php',
+                    type: 'POST',
+                    data: {
+                        to: to,
+                        subject: subject,
+                        body: body,
+                        action: 'compose'
+                    },
+                    success: function(data) {
+                        alert(data);
+                    }
+                });
+                window.location.href = "inbox.php";
+            }
+
+        });
+
     });
 </script>
 <!-- Include the Quill library -->

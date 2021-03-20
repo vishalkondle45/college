@@ -8,10 +8,10 @@ if (empty($_GET['id']) || $_GET['id'] == '') {
 
 if (isset($_GET['id'])) {
     $key = $_GET['id'];
-    $query1 = mysqli_query($conn, "SELECT * FROM inbox WHERE id='$key' AND receiver='vishalkondle@gmail.com'");
+    $query1 = mysqli_query($conn, "SELECT * FROM inbox WHERE id='$key' AND (receiver='$email' OR sender='$email')");
     $row = mysqli_fetch_assoc($query1);
     if (mysqli_num_rows($query1) != 1) {
-        echo "<script>alert('Oversmart!!')</script>";
+        // echo "<script>alert(SELECT * FROM inbox WHERE id='$key' AND (receiver='$mail_id' OR sender='$mail_id'))</script>";
         echo "<script>window.location.href='inbox.php'</script>";
     }
     echo $sender_id = $row['sender'];
@@ -84,7 +84,7 @@ if (isset($_GET['id'])) {
                         <img src="../media/dp/<?php echo $sender['photo'] ?>" alt="avatar" class="profile-pic">
                     </div>
                 </div>
-                <a href="compose.php?email=<?php echo $row['sender'] ?>&subject=<?php echo $row['subject'] ?>" class="w3-bar-item"><b><?php echo $row['sender'] ?></b></a>
+                <a href="compose.php?e=<?php echo $row['sender'] ?>" class="w3-bar-item"><b><?php echo $row['sender'] ?></b></a>
                 <p class="w3-bar-item w3-right w3-opacity">
                     <?php
                     if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM starred WHERE mail_id='$mail_id'")) > 0)
@@ -93,20 +93,18 @@ if (isset($_GET['id'])) {
                         echo '<i class="far fa-star star" id="' . $mail_id . '"></i>';
                     ?>
                 </p>
+                <a href="compose.php?b=<?php echo $row['body'] ?>&s=<?php echo "[Forward] " .  $row['subject'] ?>" class="w3-bar-item w3-right"><i class="fa fa-share"></i></a>
+                <a href="compose.php?s=<?php echo "[Reply] " . $row['subject'] ?>&e=<?php echo $row['sender'] ?>" class="w3-bar-item w3-right"><i class="fa fa-reply"></i></a>
                 <p class="w3-bar-item w3-right w3-opacity"><?php echo $row['time'] ?></p>
             </div>
             <!-- Mail Body -->
             <div class="w3-container">
                 <div class="w3-panel w3-leftbar w3-border-blue w3-light-grey w3-padding">
-                    <p class="w3-xlarge w3-serif">
-                        <i><?php echo $row['body'] ?></i>
-                    </p>
-                    <br><br>
-                    <p>Yours Sincerely</p>
-                    <p><b>Vishal Kondle</b></p>
+                    <?php echo $row['body'] ?>
                 </div>
-                <p>Attachments</p>
-                <a href="" download>Attachment1.png</a>
+                <a href="compose.php?s=<?php echo "[Reply] " . $row['subject'] ?>&e=<?php echo $row['sender'] ?>" class="w3-button w3-white w3-border w3-border-red w3-hover-red"><i class="fa fa-reply"></i> Reply</a>
+                &emsp;
+                <a href="compose.php?b=<?php echo $row['body'] ?>&s=<?php echo "[Forward] " .  $row['subject'] ?>" class="w3-button w3-white w3-border w3-border-green w3-hover-green"><i class="fa fa-share"></i> Forward</a>
             </div>
         </div>
 

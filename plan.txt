@@ -1,0 +1,14 @@
+Classroom
+    Stream [Discussion or Sharing];
+    Workspace [Assignment or Exam]
+    Students [Users present in this classroom]
+
+Stream
+
+
+
+*********** Classrrom According to Indian Education System ***********
+Notes Sharing
+Assignments
+Online Exam
+Discussion

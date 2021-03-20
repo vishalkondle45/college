@@ -136,3 +136,20 @@ if ($_POST['action'] == 'unfollow') {
         echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
     }
 }
+
+if ($_POST['action'] == 'join_class') {
+    $key = $_POST['class_id'];
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM classes WHERE `class_key`='$key'"))) {
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM class_joined WHERE `user_id`='$userid' AND `class_key`='$key'")) == 0) {
+            if (mysqli_query($conn, "INSERT INTO class_joined VALUES(NULL, '$key', '$userid', current_timestamp())")) {
+                echo "Class Joined";
+            } else {
+                echo "Problem!!";
+            }
+        } else {
+            echo "Already Joined in this Class";
+        }
+    } else {
+        echo "Wrong Class Key!!";
+    }
+}

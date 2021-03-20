@@ -26,6 +26,14 @@ if (isset($_GET['user'])) {
     <title>ChatHub</title>
 </head>
 <style>
+    body {
+        background-image: url("../media/wallpaper/wallpaper1.webp");
+    }
+
+    #messages {
+        /* background-image: url("../media/wallpaper/2.jpg"); */
+    }
+
     @media only screen and (max-width: 1026px) {
         .hidethis {
             display: none;
@@ -54,7 +62,7 @@ if (isset($_GET['user'])) {
 <body>
     <br><br>
     <div class="w3-row w3-panel">
-        <div class="w3-col w3-border example" style="height:630px; overflow-y:scroll; width:25%;">
+        <div class="w3-col w3-border example w3-white" style="height:630px; overflow-y:scroll; width:25%;">
             <input type="text" name="" oninput="w3.filterHTML('#users', 'li', this.value)" class="w3-input w3-border hidethis" placeholder="&#xF002; Search or start new chat" id="" style="font-family:Arial, FontAwesome">
             <ul class="w3-ul" id="users">
                 <?php
@@ -109,7 +117,7 @@ if (isset($_GET['user'])) {
                         </div>
                     </li>
                 </ul>
-                <div class="w3-border w3-container" style="height:504px; overflow-y:scroll;" id="messages">
+                <div class="w3-border w3-container w3-white" style="height:504px; overflow-y:scroll;" id="messages">
                     <input type="hidden" name="" id="receiver" value="<?php echo $_SESSION['chat_user_id']; ?>">
                     <input type="hidden" name="" id="sender" value="<?php echo $_SESSION['userid']; ?>">
                     <br>

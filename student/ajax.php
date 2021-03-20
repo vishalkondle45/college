@@ -153,3 +153,19 @@ if ($_POST['action'] == 'join_class') {
         echo "Wrong Class Key!!";
     }
 }
+
+if ($_POST['action'] == 'star') {
+    $id = $_POST['id'];
+    // Checking Starred or Not
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM starred WHERE mail_id='$id' AND user_id='$userid'")) > 0) {
+        if (mysqli_query($conn, "DELETE FROM starred WHERE mail_id='$id' AND user_id='$userid'")) {
+            echo "unstar";
+        }
+    } else {
+        if (mysqli_query($conn, "INSERT INTO `starred` VALUES(NULL, '$id', '$userid', current_timestamp())")) {
+            echo "star";
+        } else {
+            echo "INSERT INTO `starred` VALUES(NULL, '$id', '$userid', current_timestamp())";
+        }
+    }
+}

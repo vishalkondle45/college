@@ -26,9 +26,9 @@ include_once 'session.php';
             <p class="w3-bar-item menu-label"><span class="hidethis">vishal.kondle@gmail.com</span></p>
             <hr>
             <a href="compose.php" class="w3-bar-item w3-button"><i class="fa fa-plus-circle"></i> <span class="hidethis">Compose</span></a>
-            <a href="inbox.php" class="w3-bar-item w3-button w3-grey"><i class="fa fa-envelope"></i> <span class="hidethis">Inbox</span></a>
+            <a href="inbox.php" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> <span class="hidethis">Inbox</span></a>
             <a href="starred.php" class="w3-bar-item w3-button"><i class="fa fa-star"></i> <span class="hidethis">Starred</span></a>
-            <a href="sent.php" class="w3-bar-item w3-button"><i class="fa fa-paper-plane"></i> <span class="hidethis">Sent</span></a>
+            <a href="sent.php" class="w3-bar-item w3-button w3-grey"><i class="fa fa-paper-plane"></i> <span class="hidethis">Sent</span></a>
         </div>
         <div style="margin-left:15%; height:640px; overflow-y: scroll;" class="w3-light-grey w3-border">
             <input type="text" class="w3-input" oninput="w3.filterHTML('#id01', '.item', this.value)" placeholder="Search Keywords..">
@@ -37,7 +37,7 @@ include_once 'session.php';
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>From</th>
+                        <th>To</th>
                         <th>Subject</th>
                         <th>Time</th>
                         <th>Star</th>
@@ -46,13 +46,13 @@ include_once 'session.php';
 
                 <tbody>
                     <?php
-                    $query = mysqli_query($conn, "SELECT * FROM inbox WHERE receiver='$email'");
+                    $query = mysqli_query($conn, "SELECT * FROM inbox WHERE sender='$email'");
                     while ($row = mysqli_fetch_array($query)) {
                         $mail_id = $row['id'];
                     ?>
                         <tr class="item">
                             <th><?php echo $row['id'] ?></th>
-                            <td><a href="compose.php?e=<?php echo $row['sender']; ?>"><?php echo $row['sender']; ?></a></td>
+                            <td><a href="compose.php?email=<?php echo $row['receiver']; ?>"><?php echo $row['receiver']; ?></a></td>
                             <td><a href="mail.php?id=<?php echo $row['id']; ?>"><?php echo $row['subject']; ?></a></td>
                             <td><?php echo $row['time']; ?></td>
                             <td>

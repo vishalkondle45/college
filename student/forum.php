@@ -78,10 +78,29 @@ if (isset($_POST['reply'])) {
                         <span class="w3-small w3-opacity"><?php echo $row['time']; ?></span>
                     </div>
                     <div class="w3-bar-item w3-right" style="margin:0;">
+                        <?php
+                        $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$id' AND `following`='$userid'");
+                        $row6 = mysqli_fetch_array($query6);
+                        if (mysqli_num_rows($query6) == 0) { ?>
+                            <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                        } else {
+                            if ($row6['status'] == 0) {
+                            ?>
+                                <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                            } else {
+                            ?>
+                                <button class="button is-info follow" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                        <?php
+                            }
+                        }
+                        ?>
                         <a class="button is-info" href="#reply"> <i class="fa fa-reply"></i> &nbsp; Reply</a>
                     </div>
                 </div>
             </div>
+            <input type="hidden" value="<?php echo $forum_id; ?>" id="forum_id">
             <hr class="w3-black">
             <?php
             $query2 = mysqli_query($conn, "SELECT * FROM `forum_replies` WHERE `forum_id`='$forum_id'");
@@ -110,13 +129,28 @@ if (isset($_POST['reply'])) {
                         $user_id = $row3['id'];
                         $query5 = mysqli_query($conn, "SELECT * FROM upvote WHERE reply_id='$reply_id' AND `user_id`='$userid'");
                         $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$user_id' AND `following`='$userid'");
+                        $row6 = mysqli_fetch_array($query6);
                         $query7 = mysqli_query($conn, "SELECT * FROM `upvote` WHERE reply_id = '$reply_id'");
                         if (mysqli_num_rows($query5) == 0) { ?>
-                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag"><?php echo mysqli_num_rows($query7) ?> </button>
+                            <button class="button is-success is-outlined upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag"><?php echo mysqli_num_rows($query7) ?></span> </button>
                         <?php
                         } else { ?>
-                            <button class="button is-success is-outlined downvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvoted &emsp; <span class="tag is-success"><?php echo mysqli_num_rows($query7) ?></span> </button>
+                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-down"></i> &nbsp; Downvote &emsp; <span class="tag is-success"><?php echo mysqli_num_rows($query7) ?></span> </button>
                         <?php
+                        }
+                        if (mysqli_num_rows($query6) == 0) { ?>
+                            <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                        } else {
+                            if ($row6['status'] == 0) {
+                            ?>
+                                <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                            } else {
+                            ?>
+                                <button class="button is-info follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                        <?php
+                            }
                         }
                         ?>
                     </div>
@@ -143,36 +177,36 @@ if (isset($_POST['reply'])) {
 
 <script>
     $(document).ready(function() {
+
         $(".upvote").click(function() {
             var id = $(this).attr("id");
+            var votes = $(this).children("span").val();
+            var forum_id = $("#forum_id").val();
+            var t = $(this);
             $.ajax({
                 url: "ajax.php",
                 type: "POST",
                 data: {
                     action: 'upvote',
-                    id: id
+                    id: id,
+                    forum_id: forum_id
                 },
-                success: function(data) {}
+                success: function(data) {
+                    if (data == 1) {
+                        t.html('<i class="fa fa-arrow-down"></i> &nbsp; Downvote &emsp; <span class="tag">' + ++votes + '</span>');
+                        t.removeClass('is-outlined');
+                    } else if (data == 0) {
+                        t.html('<i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag">' + votes-- + '</span>');
+                        t.addClass('is-outlined');
+                    }
+                }
             })
-            location.reload();
-        });
-
-        $(".downvote").click(function() {
-            var id = $(this).attr("id");
-            $.ajax({
-                url: "ajax.php",
-                type: "POST",
-                data: {
-                    action: 'downvote',
-                    id: id
-                },
-                success: function(data) {}
-            })
-            location.reload();
         });
 
         $(".follow").click(function() {
             var id = $(this).attr("id");
+            var followers = $(this).children("span").val();
+            var t = $(this);
             $.ajax({
                 url: "ajax.php",
                 type: "POST",
@@ -180,11 +214,14 @@ if (isset($_POST['reply'])) {
                     action: 'follow',
                     id: id
                 },
-                success: function(data) {}
+                success: function(data) {
+                    if (data == 0) {
+                        t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
+                    } else if (data == 1) {
+                        t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
+                    }
+                }
             })
-            $(this).addClass("is-outlined");
-            $(this).text('Following');
-            $(this).attr("disabled", true);
         });
     });
 </script>

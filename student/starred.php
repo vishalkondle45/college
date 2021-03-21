@@ -46,10 +46,10 @@ include_once 'session.php';
 
                 <tbody>
                     <?php
-                    $query = mysqli_query($conn, "SELECT * FROM inbox WHERE receiver='$email'");
+                    $query = mysqli_query($conn, "SELECT * FROM inbox WHERE receiver='$email' OR sender='$email'");
                     while ($row = mysqli_fetch_array($query)) {
                         $mail_id = $row['id'];
-                        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM starred WHERE mail_id='$mail_id' AND user_id='$userid'")) == 0) {
+                        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM starred WHERE mail_id='$mail_id' AND `user_id`='$userid'")) == 0) {
                             continue;
                         }
                     ?>

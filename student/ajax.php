@@ -96,46 +96,56 @@ if ($_POST['action'] == 'update') {
 
 
 if ($_POST['action'] == 'upvote') {
-    $forum_id = $_POST['id'];
-    if (mysqli_query($conn, "INSERT INTO `upvote` VALUES(NULL, '$forum_id', '$userid', current_timestamp())")) {
-        echo true;
+    $forum_id = $_POST['forum_id'];
+    $id = $_POST['id'];
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `upvote` WHERE (`forum_id` ='$forum_id' AND `reply_id` = '$id') AND `user_id`='$userid'")) > 0) {
+        if (mysqli_query($conn, "DELETE FROM `upvote` WHERE `forum_id` ='$forum_id' AND `user_id`='$userid'")) {
+            echo 0;
+        }
+    } else {
+        if (mysqli_query($conn, "INSERT INTO `upvote` VALUES(NULL, '$forum_id', '$id' ,'$userid', current_timestamp())")) {
+            echo 1;
+        }
     }
 }
-
-if ($_POST['action'] == 'downvote') {
-    $forum_id = $_POST['id'];
-    if (mysqli_query($conn, "DELETE FROM `upvote` WHERE `reply_id`='$forum_id' AND `user_id`='$userid'")) {
-        echo true;
-    }
-}
-
 
 if ($_POST['action'] == 'follow') {
     $id = $_POST['id'];
-    if (mysqli_query($conn, "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', '', current_timestamp())")) {
-        echo true;
-    } else {
-        echo "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', '', current_timestamp())";
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 1")) > 0) {
+        if (mysqli_query($conn, "DELETE FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 1")) {
+            // echo "DELETE FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 1";
+            echo 0;
+        }
+    } elseif (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 0")) > 0) {
+        if (mysqli_query($conn, "DELETE FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 0")) {
+            // echo "DELETE FROM `follow` WHERE (`follower`= '$userid' AND `following`='$id') AND `status`= 1";
+            echo 0;
+        }
+    } elseif (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`= '$userid' AND `following`='$id'")) == 0) {
+        if (mysqli_query($conn, "INSERT INTO `follow` VALUES(NULL, '$userid', '$id', 0, current_timestamp())")) {
+            // echo "SELECT * FROM `follow` WHERE `follower`= '$userid' AND `following`='$id'";
+            echo 1;
+        }
     }
 }
 
-if ($_POST['action'] == 'cancel') {
-    $id = $_POST['id'];
-    if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
-        echo true;
-    } else {
-        echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
-    }
-}
+// if ($_POST['action'] == 'cancel') {
+//     $id = $_POST['id'];
+//     if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
+//         echo true;
+//     } else {
+//         echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
+//     }
+// }
 
-if ($_POST['action'] == 'unfollow') {
-    $id = $_POST['id'];
-    if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
-        echo true;
-    } else {
-        echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
-    }
-}
+// if ($_POST['action'] == 'unfollow') {
+//     $id = $_POST['id'];
+//     if (mysqli_query($conn, "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'")) {
+//         echo true;
+//     } else {
+//         echo "DELETE FROM `follow` WHERE `following`='$id' AND `follower`='$userid'";
+//     }
+// }
 
 if ($_POST['action'] == 'join_class') {
     $key = $_POST['class_id'];

@@ -14,10 +14,10 @@ if (isset($_GET['user'])) {
         echo "<script>alert('Oversmart!!')</script>";
         echo "<script>window.location.href='profile.php?user=" . $user_key . "'</script>";
     } else {
-        $receiver = $_SESSION['chat_user_id'] = $row1['id'];
+        $receiver = $row1['id'];
         $posts = mysqli_query($conn, "SELECT * FROM `posts` WHERE `userid`='$receiver'");
-        $followers = mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`='$receiver' AND `status`=1");
-        $following = mysqli_query($conn, "SELECT * FROM `follow` WHERE `following`='$receiver' AND `status`=1");
+        $followers = mysqli_query($conn, "SELECT * FROM `follow` WHERE `following`='$receiver' AND `status`=1");
+        $following = mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`='$receiver' AND `status`=1");
     }
 }
 
@@ -74,23 +74,21 @@ if (isset($_GET['user'])) {
                     <h3><?php echo $row1['username']; ?>
                         &emsp;
                         <?php
-                        $query3 = mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`= '$userid' AND `following`='$receiver'");
-                        $row3 = mysqli_fetch_array($query3);
-                        if ($userid != $receiver) {
-                            if (mysqli_num_rows($query3) == 0) {
-                        ?>
-                                <button class="button is-info follow" id="<?php echo $receiver ?>">Follow</button>
-                                <?php
+                        $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$receiver'");
+                        $row6 = mysqli_fetch_array($query6);
+                        // echo "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$receiver'";
+                        if (mysqli_num_rows($query6) == 0) { ?>
+                            <button class="button is-info is-outlined follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                        } else {
+                            if ($row6['status'] == 0) {
+                            ?>
+                                <button class="button is-info is-outlined follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
                             } else {
-                                if ($row3['status'] == 0) {
-                                ?>
-                                    <button class="button is-outlined cancel" id="<?php echo $receiver ?>">Requested</button>
-                                <?php
-                                } else {
-                                ?>
-                                    <button class="button is-outlined unfollow" id="<?php echo $receiver ?>">Following</button>
+                            ?>
+                                <button class="button is-info follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
                         <?php
-                                }
                             }
                         }
                         ?>
@@ -98,11 +96,11 @@ if (isset($_GET['user'])) {
                     <br>
                     <p class="w3-row">
                         <!-- Posts -->
-                        <span class="w3-third"> <b><?php echo mysqli_num_rows($posts); ?></b> Posts</span>
-                        <!-- Followers -->
-                        <span class="w3-third"> <b><?php echo mysqli_num_rows($followers); ?></b> Followers</span>
-                        <!-- Following -->
-                        <span class="w3-third"> <b><?php echo mysqli_num_rows($following); ?></b> Following</span>
+                    <p class="w3-third"> <b><?php echo mysqli_num_rows($posts); ?></b> Posts</p>
+                    <!-- Followers -->
+                    <p class="w3-third" onclick="w3.toggleClass('#followers', 'is-active')"> <b><?php echo mysqli_num_rows($followers); ?></b> Followers</p>
+                    <!-- Following -->
+                    <p class="w3-third" onclick="w3.toggleClass('#followings', 'is-active')"> <b><?php echo mysqli_num_rows($following); ?></b> Following</p>
                     </p>
                     <br>
                     <div>
@@ -144,6 +142,114 @@ if (isset($_GET['user'])) {
         <div class="w3-col" style="width:20%"></div>
     </div>
 
+    <div class="modal" id="followers">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Followers</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+                <ul class="w3-ul">
+                    <?php
+                    while ($row = mysqli_fetch_array($followers)) {
+                        $id = $row['follower'];
+                        if ($id == $receiver) {
+                            continue;
+                        }
+                        $query = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                        $row2 = mysqli_fetch_array($query);
+                    ?>
+                        <li class="w3-bar">
+                            <img src="../media/dp/<?php echo $row2['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                            <div class="w3-bar-item">
+                                <span class="w3-large"><?php echo $row2['username']; ?></span><br>
+                                <span><?php echo $row2['fname'] . ' ' . $row2['lname']; ?></span>
+                            </div>
+                            <?php
+                            $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'");
+                            $row6 = mysqli_fetch_array($query6);
+                            if ($row2['id'] == $userid) {
+                                continue;
+                            }
+                            // echo "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'";
+                            if (mysqli_num_rows($query6) == 0) { ?>
+                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                            } else {
+                                if ($row6['status'] == 0) {
+                                ?>
+                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                                }
+                            }
+                            ?>
+                            <!-- <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button> -->
+                        </li>
+                    <?php } ?>
+                </ul>
+            </section>
+        </div>
+        <!-- <button class="modal-close is-large" aria-label="close"></button> -->
+    </div>
+
+    <div class="modal" id="followings">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Following</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+                <ul class="w3-ul">
+                    <?php
+                    while ($row = mysqli_fetch_array($following)) {
+                        $id = $row['following'];
+                        $query = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                        $row2 = mysqli_fetch_array($query);
+                    ?>
+                        <li class="w3-bar">
+                            <img src="../media/dp/<?php echo $row2['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                            <div class="w3-bar-item">
+                                <span class="w3-large"><?php echo $row2['username']; ?></span><br>
+                                <span><?php echo $row2['fname'] . ' ' . $row2['lname']; ?></span>
+                            </div>
+                            <?php
+                            if ($row2['id'] == $userid) {
+                                continue;
+                            }
+                            $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'");
+                            $row6 = mysqli_fetch_array($query6);
+                            if (mysqli_num_rows($query6) == 0) { ?>
+                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                            } else {
+                                if ($row6['status'] == 0) {
+                                ?>
+                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                            <?php
+                                }
+                            }
+                            ?>
+                            <!-- <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button> -->
+                        </li>
+                    <?php } ?>
+                </ul>
+            </section>
+        </div>
+        <!-- <button class="modal-close is-large" aria-label="close"></button> -->
+    </div>
+
 </body>
 
 </html>
@@ -153,6 +259,8 @@ if (isset($_GET['user'])) {
 
         $(".follow").click(function() {
             var id = $(this).attr("id");
+            var followers = $(this).children("span").val();
+            var t = $(this);
             $.ajax({
                 url: "ajax.php",
                 type: "POST",
@@ -161,41 +269,18 @@ if (isset($_GET['user'])) {
                     id: id
                 },
                 success: function(data) {
-                    location.reload();
-                }
-            });
-        });
-
-        $(".cancel").click(function() {
-            var id = $(this).attr("id");
-            $.ajax({
-                url: "ajax.php",
-                type: "POST",
-                data: {
-                    action: 'cancel',
-                    id: id
-                },
-                success: function(data) {
-                    location.reload();
-                }
-            });
-        });
-
-        $(".unfollow").click(function() {
-            var id = $(this).attr("id");
-            if (confirm("If you change your mind, you'll have to request to follow again.")) {
-                $.ajax({
-                    url: "ajax.php",
-                    type: "POST",
-                    data: {
-                        action: 'unfollow',
-                        id: id
-                    },
-                    success: function(data) {
-                        location.reload();
+                    if (data == 0) {
+                        t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
+                    } else if (data == 1) {
+                        t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
                     }
-                });
-            }
+                }
+            })
+            // alert($(this).attr('id'));
+        });
+
+        $(".delete").click(function() {
+            $(this).parent("header").parent("div").parent("div").toggleClass("is-active");
         });
 
     });

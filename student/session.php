@@ -15,6 +15,7 @@ $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$userid'");
 $user_row = mysqli_fetch_assoc($query1);
 $user_key = $user_row['unique_key'];
 $email = $user_row['email'];
+$user_id = $user_row['username'];
 $flname = $user_row['fname'] . ' ' . $user_row['lname'];
 
 $query2 = mysqli_query($conn, "SELECT * FROM college WHERE `id`='$collegeid'");

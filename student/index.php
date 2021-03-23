@@ -95,7 +95,7 @@ if (isset($_POST['post'])) {
                                 <img src="../media/dp/<?php echo $poster['photo'] ?>" alt="" srcset="" class="profile-pic">
                             </div>
                         </div>
-                        <a href="profile.php?user=<?php echo $poster['unique_key'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
+                        <a href="profile.php?user=<?php echo $poster['username'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
                         <div class="level-right">
                             <div class="dropdown is-hoverable">
                                 <div class="dropdown-trigger">
@@ -126,7 +126,24 @@ if (isset($_POST['post'])) {
                     <!-- Post Body -->
                     <div class="message-body">
                         <figure class="image">
-                            <img src="../media/posts/<?php echo $posts['post']; ?>">
+                            <?php
+                            $path_parts = pathinfo($posts['post']);
+                            if (in_array($path_parts['extension'], array("png", "jpg", "jpeg"))) {
+                            ?>
+                                <img src="../media/posts/<?php echo $posts['post']; ?>">
+                            <?php
+                            } else {
+                            ?>
+                                <video width="" height="" autoplay muted controls loop onload="" controlsList="nodownload nofullscreen" disablePictureInPicture>
+                                    <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/mp4">
+                                    <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/mov">
+                                    <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/webm">
+                                    <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/avi">
+                                    <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/mkv">
+                                </video>
+                            <?php
+                            }
+                            ?>
                         </figure>
                         <br>
                         <p><?php echo $posts['caption']; ?></p>

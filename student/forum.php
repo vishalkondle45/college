@@ -14,10 +14,14 @@ if (isset($_GET['id'])) {
     $id = $row['user_id'];
     $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$id'");
     $row1 = mysqli_fetch_array($query1);
+
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM views WHERE `content`='forum' AND `content_id`='$forum_id' AND `viewer_id`='$userid'")) == 0) {
+        if (mysqli_query($conn, "INSERT INTO views VALUES(NULL, 'forum', '$forum_id', '$userid', current_timestamp())")) {
+        }
+    }
 }
 if (isset($_POST['reply'])) {
     $reply_text = nl2br($_POST['reply_text']);
-    // echo "<script>alert('Hello')</script>";
     if (mysqli_query($conn, "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$userid', '$reply_text', current_timestamp())")) {
         echo "<script>window.location.href='forum.php?id=" . $forum_id . "'</script>";
     } else {
@@ -71,7 +75,7 @@ if (isset($_POST['reply'])) {
                         </div>
                     </figure>
                     <div class="w3-bar-item" style="margin:0;">
-                        <a href="user.php?key=<?php echo $row1['unique_key']; ?>">
+                        <a href="profile.php?user=<?php echo $row1['username']; ?>">
                             <b><span class="">By <?php echo $row1['username']; ?></span></b>
                         </a>
                         <br>
@@ -115,7 +119,7 @@ if (isset($_POST['reply'])) {
                 <div class="w3-row w3-white w3-container w3-padding w3-leftbar w3-border-blue w3-responsive">
                     <div class="w3-col w3-center w3-border-right w3-hide-small" style="width:10%;">
                         <b>
-                            <a class="" href="user.php?key=<?php echo $row1['unique_key']; ?>"><?php echo $row3['username'] ?></a>
+                            <a class="" href="profile.php?key=<?php echo $row1['username']; ?>"><?php echo $row3['username'] ?></a>
                         </b>
                         <p class=""><?php echo $row3['usertype'] ?></p>
                         <br>

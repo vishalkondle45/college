@@ -3,16 +3,16 @@ include_once 'header.php';
 include_once 'session.php';
 
 if (empty($_GET['user']) || $_GET['user'] == '') {
-    echo "<script>window.location.href='profile.php?user=" . $user_key . "'</script>";
+    echo "<script>window.location.href='profile.php?user=" . $user_id . "'</script>";
 }
 
 if (isset($_GET['user'])) {
     $key = $_GET['user'];
-    $query1 = mysqli_query($conn, "SELECT * FROM users WHERE unique_key='$key' AND college_id='$collegeid'");
+    $query1 = mysqli_query($conn, "SELECT * FROM users WHERE username='$key' AND college_id='$collegeid'");
     $row1 = mysqli_fetch_assoc($query1);
     if (mysqli_num_rows($query1) != 1) {
         echo "<script>alert('Oversmart!!')</script>";
-        echo "<script>window.location.href='profile.php?user=" . $user_key . "'</script>";
+        echo "<script>window.location.href='profile.php?user=" . $user_id . "'</script>";
     } else {
         $receiver = $row1['id'];
         $posts = mysqli_query($conn, "SELECT * FROM `posts` WHERE `userid`='$receiver'");
@@ -97,6 +97,7 @@ if (isset($_GET['user'])) {
                                 } else {
                                 ?>
                                     <button class="button is-info follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <a class="button is-info" href="chathub.php?user=<?php echo $row1['username']; ?>"> <i class="fa fa-user-check"></i> &nbsp; Message &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </a>
                         <?php
                                 }
                             }
@@ -158,11 +159,35 @@ if (isset($_GET['user'])) {
                     </div>
                 </div>
             </div>
-            <hr>
+            <br>
+
+            <!-- Tabs -->
+            <div class="tabs is-centered">
+                <ul>
+                    <li class="is-active tab" id="posts">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+                            <span>Posts</span>
+                        </a>
+                    </li>
+                    <li class="tab" id="forums">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-comments" aria-hidden="true"></i></span>
+                            <span>Forums</span>
+                        </a>
+                    </li>
+                    <li class="tab" id="polls">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-poll" aria-hidden="true"></i></span>
+                            <span>Polls</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
             <!-- Posts -->
-            <div>
-                <div class=" w3-row-padding w3-margin-top w3-center">
+            <div class="posts">
+                <div class="w3-row-padding w3-margin-top w3-center">
                     <?php
                     if (mysqli_num_rows($query7) > 0 || $userid == $receiver) {
                         $query = mysqli_query($conn, "SELECT * FROM posts WHERE `userid`='$receiver' ORDER BY id DESC");
@@ -196,6 +221,72 @@ if (isset($_GET['user'])) {
                 </div>
             </div>
 
+            <!-- Forums -->
+            <div class="forums" style="display:none">
+                <ul class="w3-ul w3-white" id="forums_list">
+                    <?php
+                    $forums = mysqli_query($conn, "SELECT * FROM forums WHERE college_id = '$collegeid' AND user_id = '$receiver' ORDER BY id DESC");
+                    while ($row = mysqli_fetch_array($forums)) {
+                        $id = $row['user_id'];
+                        $forum_id = $row['id'];
+                        $user = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                        $row1 = mysqli_fetch_array($user);
+                        $replies = mysqli_query($conn, "SELECT * FROM forum_replies WHERE `forum_id`='$forum_id'");
+                        $views = mysqli_query($conn, "SELECT * FROM views WHERE `content_id`='$forum_id' AND `content`='forum'");
+                        $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-pink", "w3-border-purple", "w3-border-amber", "w3-border-aqua", "w3-border-brown", "w3-border-cyan", "w3-border-light-green", "w3-border-indigo", "w3-border-khaki", "w3-hover-border-lime", "w3-border-orange", "w3-border-deep-orange", "w3-border-deep-purple", "w3-border-sand", "w3-border-teal", "w3-border-yellow", "w3-border-black", "w3-border-grey", "w3-border-light-grey", "w3-border-dark-grey");
+                        // echo sizeof($array);
+                    ?>
+                        <li class="w3-bar w3-leftbar <?php echo $array[mt_rand(0, 22)]; ?> w3-border-0">
+                            <div class="w3-bar-item w3-left">
+                                <a href="forum.php?id=<?php echo $forum_id; ?>" style="text-decoration: none; color:black;">
+                                    <span class="ellipsis w3-large"><?php echo $row['forum']; ?></span><br>
+                                    <span class="w3-small w3-opacity">By <?php echo $row1['username']; ?>, <?php echo $row['time']; ?></span>
+                                </a>
+                            </div>
+
+                            <div class="w3-bar-item w3-right w3-border-left">
+                                <span class=""><?php echo mysqli_num_rows($replies); ?> replies</span><br>
+                                <span class="w3-small w3-opacity"><?php echo mysqli_num_rows($views); ?> views</span>
+                            </div>
+                        </li>
+                        <hr style="margin-top: 5px;margin-bottom: 5px;">
+                    <?php } ?>
+                </ul>
+            </div>
+
+            <!-- Polls -->
+            <div class="polls" style="display:none">
+                <ul class="w3-ul w3-white" id="forums_list">
+                    <?php
+                    $forums = mysqli_query($conn, "SELECT * FROM poll WHERE college_id = '$collegeid' AND `user_id` = '$receiver' ORDER BY id DESC");
+                    while ($row = mysqli_fetch_array($forums)) {
+                        $id = $row['user_id'];
+                        $forum_id = $row['id'];
+                        $poll_by = $row['poll_by'];
+                        $user = mysqli_query($conn, "SELECT * FROM `$poll_by` WHERE id ='$id'");
+                        $row1 = mysqli_fetch_array($user);
+                        $replies = mysqli_query($conn, "SELECT * FROM results WHERE `poll_id`='$forum_id'");
+                        $views = mysqli_query($conn, "SELECT * FROM views WHERE `content_id`='$forum_id' AND `content`='poll'");
+                        $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-pink", "w3-border-purple", "w3-border-amber", "w3-border-aqua", "w3-border-brown", "w3-border-cyan", "w3-border-light-green", "w3-border-indigo", "w3-border-khaki", "w3-hover-border-lime", "w3-border-orange", "w3-border-deep-orange", "w3-border-deep-purple", "w3-border-sand", "w3-border-teal", "w3-border-yellow", "w3-border-black", "w3-border-grey", "w3-border-light-grey", "w3-border-dark-grey");
+                    ?>
+                        <li class="w3-bar w3-leftbar <?php echo $array[mt_rand(0, 22)]; ?> w3-border-0">
+                            <div class="w3-bar-item w3-left">
+                                <a href="poll.php?id=<?php echo $forum_id; ?>" style="text-decoration: none; color:black;">
+                                    <span class="ellipsis w3-large"><?php echo $row['question']; ?></span><br>
+                                    <span class="w3-small w3-opacity">By <?php echo $row1['username']; ?>, <?php echo $row['time']; ?></span>
+                                </a>
+                            </div>
+
+                            <div class="w3-bar-item w3-right w3-border-left">
+                                <span class=""><?php echo mysqli_num_rows($replies); ?> Votes</span><br>
+                                <span class="w3-small w3-opacity"><?php echo mysqli_num_rows($views); ?> views</span>
+                            </div>
+                        </li>
+                        <hr style="margin-top: 5px;margin-bottom: 5px;">
+                    <?php } ?>
+                </ul>
+            </div>
+
         </div>
         <div class="w3-col w3-hide-small" style="width:20%"></div>
     </div>
@@ -222,7 +313,7 @@ if (isset($_GET['user'])) {
                         <li class="w3-bar">
                             <img src="../media/dp/<?php echo $row2['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
                             <div class="w3-bar-item">
-                                <span class="w3-large"> <a href="profile.php?user=<?php echo $row2['unique_key']; ?>"> <?php echo $row2['username']; ?> </a></span><br>
+                                <span class="w3-large"> <a href="profile.php?user=<?php echo $row2['username']; ?>"> <?php echo $row2['username']; ?> </a></span><br>
                                 <span><?php echo $row2['fname'] . ' ' . $row2['lname']; ?></span>
                             </div>
                             <?php
@@ -274,7 +365,7 @@ if (isset($_GET['user'])) {
                         <li class="w3-bar">
                             <img src="../media/dp/<?php echo $row2['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
                             <div class="w3-bar-item">
-                                <span class="w3-large"> <a href="profile.php?user=<?php echo $row2['unique_key']; ?>"> <?php echo $row2['username']; ?> </a></span><br>
+                                <span class="w3-large"> <a href="profile.php?user=<?php echo $row2['username']; ?>"> <?php echo $row2['username']; ?> </a></span><br>
                                 <span><?php echo $row2['fname'] . ' ' . $row2['lname']; ?></span>
                             </div>
                             <?php
@@ -332,7 +423,7 @@ if (isset($_GET['user'])) {
                             <li class="w3-bar">
                                 <img src="../media/dp/<?php echo $row9['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
                                 <div class="w3-bar-item">
-                                    <span class="w3-large"> <a href="profile.php?user=<?php echo $row9['unique_key']; ?>"> <?php echo $row9['username']; ?> </a></span><br>
+                                    <span class="w3-large"> <a href="profile.php?user=<?php echo $row9['username']; ?>"> <?php echo $row9['username']; ?> </a></span><br>
                                     <span><?php echo $row9['fname'] . ' ' . $row9['lname']; ?></span>
                                 </div>
                                 <?php
@@ -373,7 +464,6 @@ if (isset($_GET['user'])) {
 
 <script>
     $(document).ready(function() {
-
 
         $(".follow").click(function() {
             var id = $(this).attr("id");
@@ -420,28 +510,31 @@ if (isset($_GET['user'])) {
                     })
                 }
             });
-
-            // $.ajax({
-            //     url: "ajax.php",
-            //     type: "POST",
-            //     data: {
-            //         action: 'follow',
-            //         id: id
-            //     },
-            //     success: function(data) {
-            //         if (data == 0) {
-            //             t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
-            //         } else if (data == 1) {
-            //             t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
-            //         }
-            //     }
-            // })
-            // alert($(this).attr('id'));
         });
 
+        // 
         $(".delete").click(function() {
             $(this).parent("header").parent("div").parent("div").toggleClass("is-active");
         });
 
+        // Tabs
+        $(".tab").click(function() {
+            $(".is-active").removeClass("is-active");
+            $(this).addClass("is-active");
+            var choice = $(this).attr("id");
+            if (choice == "posts") {
+                $(".posts").show();
+                $(".forums").hide();
+                $(".polls").hide();
+            } else if (choice == "forums") {
+                $(".posts").hide();
+                $(".forums").show();
+                $(".polls").hide();
+            } else if (choice == "polls") {
+                $(".posts").hide();
+                $(".forums").hide();
+                $(".polls").show();
+            }
+        });
     });
 </script>

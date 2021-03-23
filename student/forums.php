@@ -1,5 +1,6 @@
 <?php
 include_once 'header.php';
+include_once 'session.php';
 if (isset($_POST['submit'])) {
     $forum = $_POST['topic'];
     if (mysqli_query($conn, "INSERT INTO forums VALUES(NULL, '$userid', '$collegeid', '$forum', NULL)")) {
@@ -86,7 +87,7 @@ if (isset($_POST['submit'])) {
                             </a>
                         </div>
                         <div class="w3-bar-item w3-right">
-                            <a href="profile.php?user=<?php echo $row1['unique_key']; ?>">
+                            <a href="profile.php?user=<?php echo $row1['username']; ?>">
                                 <span class=""><?php echo $row1['username']; ?></span>
                             </a>
                             <br>
@@ -94,7 +95,7 @@ if (isset($_POST['submit'])) {
                         </div>
                         <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
                             <div class="image-cropper is-48x48">
-                                <img src="../media/dp/090b9b6bb28ee515e10dc22177f6d54e.png" alt="" srcset="" class="profile-pic">
+                                <img src="../media/dp/<?php echo $row1['photo']; ?>" alt="" srcset="" class="profile-pic">
                             </div>
                         </figure>
                         <div class="w3-bar-item w3-right w3-border-right">

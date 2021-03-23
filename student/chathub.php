@@ -4,7 +4,7 @@ include_once 'session.php';
 
 if (isset($_GET['user'])) {
     $key = $_GET['user'];
-    $query1 = mysqli_query($conn, "SELECT * FROM users WHERE unique_key='$key' AND college_id='$collegeid'");
+    $query1 = mysqli_query($conn, "SELECT * FROM users WHERE username='$key' AND college_id='$collegeid'");
     $row1 = mysqli_fetch_assoc($query1);
     if (mysqli_num_rows($query1) != 1) {
         echo "<script>alert('Oversmart!!')</script>";

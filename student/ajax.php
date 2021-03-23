@@ -48,7 +48,7 @@ if ($_POST['action'] == 'comment') {
 if ($_POST['action'] == 'message') {
     $sender = $_POST['sender'];
     $receiver = $_POST['receiver'];
-    $message = $_POST['message'];
+    $message = mysqli_real_escape_string($conn, $_POST['message']);
     if (mysqli_query($conn, "INSERT INTO `message` VALUES(NULL, '$sender', '$receiver', '$message', NULL)")) {
         $query = mysqli_query($conn, "SELECT * FROM `message` WHERE `sender`='$sender' AND `receiver`='$receiver' ORDER BY `id` DESC LIMIT 1");
         $row = mysqli_fetch_array($query);

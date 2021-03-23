@@ -70,7 +70,7 @@ if (isset($_GET['post'])) {
                             <img src="../media/dp/<?php echo $poster['photo'] ?>" alt="" srcset="" class="profile-pic">
                         </div>
                     </div>
-                    <a href="profile.php?user=<?php echo $poster['unique_key'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
+                    <a href="profile.php?user=<?php echo $poster['username'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
                     <div class="level-right">
                         <div class="dropdown is-hoverable">
                             <div class="dropdown-trigger">

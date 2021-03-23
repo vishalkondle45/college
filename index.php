@@ -2,6 +2,17 @@
 include_once 'includes/conn.php';
 session_start();
 
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] == 'student')
+        echo "<script>window.location.href='student/index.php'</script>";
+    elseif ($_SESSION['role'] == 'teacher')
+        echo "<script>window.location.href='teacher/index.php'</script>";
+    elseif ($_SESSION['role'] == 'college')
+        echo "<script>window.location.href='college/index.php'</script>";
+    elseif ($_SESSION['role'] == 'admin')
+        echo "<script>window.location.href='admin/index.php'</script>";
+}
+
 // Login
 if (isset($_POST['login'])) {
     $usertype = mysqli_real_escape_string($conn, $_POST['usertype']);
@@ -19,13 +30,19 @@ if (isset($_POST['login'])) {
     }
 
     if (mysqli_num_rows($query)) {
+
+        $_SESSION['role'] = $usertype;
         $_SESSION['usertype'] = $_POST['usertype'];
         $_SESSION['username'] = $_POST['username'];
-        $row = mysqli_fetch_assoc($query);
+
+        $row = mysqli_fetch_array($query);
+        $_SESSION['collegeid'] = $row['college_id'];
+        $_SESSION['userid'] = $row['id'];
         $_SESSION['id'] = $id = $row['id'];
+
         echo "<script>window.location.href='$usertype/index.php'</script>";
     } else
-        echo "<script>alert('Invalid Credentials!!!'); window.location.href='index.php'</script>";
+        echo "<script>alert('Wrong Credentials'); window.location.href='index.php'</script>";
 }
 
 // Message us

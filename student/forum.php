@@ -79,20 +79,22 @@ if (isset($_POST['reply'])) {
                     </div>
                     <div class="w3-bar-item w3-right" style="margin:0;">
                         <?php
-                        $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$id' AND `following`='$userid'");
-                        $row6 = mysqli_fetch_array($query6);
-                        if (mysqli_num_rows($query6) == 0) { ?>
-                            <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                            <?php
-                        } else {
-                            if ($row6['status'] == 0) {
-                            ?>
-                                <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                            <?php
+                        if ($id != $userid) {
+                            $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$id' AND `following`='$userid'");
+                            $row6 = mysqli_fetch_array($query6);
+                            if (mysqli_num_rows($query6) == 0) { ?>
+                                <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
                             } else {
-                            ?>
-                                <button class="button is-info follow" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                if ($row6['status'] == 0) {
+                                ?>
+                                    <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button class="button is-info follow" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
                         <?php
+                                }
                             }
                         }
                         ?>
@@ -132,24 +134,26 @@ if (isset($_POST['reply'])) {
                         $row6 = mysqli_fetch_array($query6);
                         $query7 = mysqli_query($conn, "SELECT * FROM `upvote` WHERE reply_id = '$reply_id'");
                         if (mysqli_num_rows($query5) == 0) { ?>
-                            <button class="button is-success is-outlined upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag"><?php echo mysqli_num_rows($query7) ?></span> </button>
+                            <button class="button is-success is-outlined upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-up"></i> &nbsp; Upvote &emsp; <span class="tag is-success"><?php echo mysqli_num_rows($query7) ?></span> </button>
                         <?php
                         } else { ?>
-                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-down"></i> &nbsp; Downvote &emsp; <span class="tag is-success"><?php echo mysqli_num_rows($query7) ?></span> </button>
-                        <?php
+                            <button class="button is-success upvote" id="<?php echo $row2['id']; ?>"> <i class="fa fa-arrow-down"></i> &nbsp; Downvote &emsp; <span class="tag"><?php echo mysqli_num_rows($query7) ?></span> </button>
+                            <?php
                         }
-                        if (mysqli_num_rows($query6) == 0) { ?>
-                            <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                            <?php
-                        } else {
-                            if ($row6['status'] == 0) {
-                            ?>
-                                <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                            <?php
+                        if ($user_id != $userid) {
+                            if (mysqli_num_rows($query6) == 0) { ?>
+                                <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
                             } else {
-                            ?>
-                                <button class="button is-info follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                if ($row6['status'] == 0) {
+                                ?>
+                                    <button class="button is-info is-outlined follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button class="button is-info follow" id="<?php echo $row2['id']; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
                         <?php
+                                }
                             }
                         }
                         ?>

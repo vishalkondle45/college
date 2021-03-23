@@ -105,6 +105,7 @@ if (isset($_GET['post'])) {
                     </figure>
                     <br>
 
+                    <p><?php echo $row1['caption']; ?></p>
                     <!-- $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").removeClass("is-primary"); -->
                     <!-- Like Comment Share -->
                     <nav class="level is-mobile post_extensions">

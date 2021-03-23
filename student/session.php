@@ -1,9 +1,15 @@
 <?php
+session_start();
 date_default_timezone_set("Asia/Kolkata");
 $conn = mysqli_connect('localhost', 'root', '', 'collegeweb');
+
+if (empty($_SESSION['usertype']) || $_SESSION['role'] != 'student') {
+    echo "<script>window.location.href='../index.php';</script>";
+}
+
 $usertype = $_SESSION['usertype'] = 'users';
-$userid = $_SESSION['userid'] = 1;
-$collegeid = $_SESSION['collegeid'] = 1;
+$userid = $_SESSION['userid'];
+$collegeid = $_SESSION['collegeid'];
 
 $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$userid'");
 $user_row = mysqli_fetch_assoc($query1);

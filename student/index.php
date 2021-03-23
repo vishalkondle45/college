@@ -129,6 +129,7 @@ if (isset($_POST['post'])) {
                             <img src="../media/posts/<?php echo $posts['post']; ?>">
                         </figure>
                         <br>
+                        <p><?php echo $posts['caption']; ?></p>
 
                         <!-- $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").removeClass("is-primary"); -->
                         <!-- Like Comment Share -->

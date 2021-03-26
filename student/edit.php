@@ -2,25 +2,8 @@
 include_once 'header.php';
 include_once 'session.php';
 
-if (empty($_GET['user']) || $_GET['user'] == '') {
-    echo "<script>window.location.href='profile.php?user=" . $user_id . "'</script>";
-}
-
-if (isset($_GET['user'])) {
-    $key = $_GET['user'];
-    $query1 = mysqli_query($conn, "SELECT * FROM users WHERE username='$key' AND college_id='$collegeid'");
-    $row1 = mysqli_fetch_assoc($query1);
-    if (mysqli_num_rows($query1) != 1) {
-        echo "<script>alert('Oversmart!!')</script>";
-        echo "<script>window.location.href='profile.php?user=" . $user_id . "'</script>";
-    } else {
-        $receiver = $row1['id'];
-        $posts = mysqli_query($conn, "SELECT * FROM `posts` WHERE `userid`='$receiver'");
-        $followers = mysqli_query($conn, "SELECT * FROM `follow` WHERE `following`='$receiver' AND `status`=1 ORDER BY RAND()");
-        $following = mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`='$receiver' AND `status`=1 ORDER BY RAND()");
-    }
-}
-
+$query = mysqli_query($conn, "SELECT * FROM users WHERE id ='$userid'");
+$row = mysqli_fetch_array($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,43 +15,36 @@ if (isset($_GET['user'])) {
     <title>ChatHub</title>
 </head>
 <style>
-    @media only screen and (max-width: 1026px) {
-        .hidethis {
-            display: none;
-        }
-    }
-
-    .image-cropper {
-        width: 50px;
-        height: 50px;
-        position: relative;
-        overflow: hidden;
-        border-radius: 50%;
-        border: solid 0.0002em black;
-    }
-
-    .profile-pic {
-        display: inline;
-        margin: 0 auto;
-        /* margin-left: 25%; */
-        /* height: 100%; */
-        width: auto;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    a {
-        color: inherit;
+    input {
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 </style>
 
-
 <body>
+    <br><br>
     <div class="w3-row w3-panel">
         <div class="w3-col w3-hide-small" style="width:20%">&emsp;</div>
-        <div class="w3-col" style="width:60%"></div>
+        <div class="w3-col" style="width:60%">
+            <!-- <form action=""> -->
+            <input type="text" class="input" name="username" value="<?php echo $row['username']; ?>">
+            <input type="text" class="input" name="FirstName" value="<?php echo $row['fname']; ?>">
+            <input type="text" class="input" name="MidlleName" value="<?php echo $row['mname']; ?>">
+            <input type="text" class="input" name="LastName" value="<?php echo $row['lname']; ?>">
+            <input type="text" class="input" name="password" value="<?php echo $row['password']; ?>">
+            <input type="text" class="input" name="email" value="<?php echo $row['email']; ?>">
+            <input type="text" class="input" name="mobile" value="<?php echo $row['mobile']; ?>">
+            <input type="text" class="input" name="address" value="<?php echo $row['address']; ?>">
+            <input type="text" class="input" name="city" value="<?php echo $row['city']; ?>">
+            <input type="text" class="input" name="pincode" value="<?php echo $row['pincode']; ?>">
+            <input type="text" class="input" name="address" value="<?php echo $row['address']; ?>">
+            <input type="text" class="input" name="education" value="<?php echo $row['education']; ?>">
+            <input type="text" class="input" name="department" value="<?php echo $row['department']; ?>">
+            <center>
+                <button class="button is-success">Save</button>
+            </center>
+            <!-- </form> -->
+        </div>
         <div class="w3-col w3-hide-small" style="width:20%"></div>
     </div>
 </body>

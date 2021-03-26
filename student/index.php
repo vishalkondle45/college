@@ -134,7 +134,7 @@ if (isset($_POST['post'])) {
                             <?php
                             } else {
                             ?>
-                                <video width="" height="" autoplay muted controls loop onload="" controlsList="nodownload nofullscreen" disablePictureInPicture>
+                                <video width="" height="" class="video" id="<?php echo $posts['id']; ?>" controls autoplay muted loop onload="" controlsList="nodownload nofullscreen" disablePictureInPicture>
                                     <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/mp4">
                                     <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/mov">
                                     <source src="../media/posts/<?php echo $posts['post']; ?>" type="video/webm">
@@ -148,7 +148,7 @@ if (isset($_POST['post'])) {
                         <br>
                         <p><?php echo $posts['caption']; ?></p>
 
-                        <!-- $(this).siblings("nav").children(".like_comment").children(".comment_section").children(".tags").children(".tag").removeClass("is-primary"); -->
+
                         <!-- Like Comment Share -->
                         <nav class="level is-mobile post_extensions">
                             <div class="level-left like_comment">
@@ -272,6 +272,7 @@ if (isset($_POST['post'])) {
 
 <script>
     $(document).ready(function() {
+
         $(".share").click(function() {
             $(this).parent().parent().parent().siblings(".modal").show();
         });

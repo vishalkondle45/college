@@ -80,7 +80,7 @@ if (isset($_GET['user'])) {
                         $time = "";
                     }
                 ?>
-                    <a href="chathub.php?user=<?php echo $row['unique_key']; ?>">
+                    <a href="chathub.php?user=<?php echo $row['username']; ?>">
                         <li class="w3-bar w3-border">
                             <img src="../media/dp/<?php echo $row['photo']; ?>" class="w3-image w3-circle w3-left" width="65" height="65">
                             <span class="w3-right w3-margin w3-small w3-text-black is-hidden-mobile"><?php echo $time; ?></span>

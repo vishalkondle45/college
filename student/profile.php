@@ -97,10 +97,14 @@ if (isset($_GET['user'])) {
                                 } else {
                                 ?>
                                     <button class="button is-info follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                                    <a class="button is-info" href="chathub.php?user=<?php echo $row1['username']; ?>"> <i class="fa fa-user-check"></i> &nbsp; Message &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </a>
-                        <?php
+                                    <a class="button is-danger" href="chathub.php?user=<?php echo $row1['username']; ?>"> <i class="fa fa-comment"></i> &nbsp; Message &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </a>
+                            <?php
                                 }
                             }
+                        } else {
+                            ?>
+                            <a href="" class="button is-outlined is-dark">Edit Profile</a>
+                        <?php
                         }
                         ?>
                     </h3>
@@ -129,7 +133,6 @@ if (isset($_GET['user'])) {
                             <p><?php echo $row1['fname'] . ' ' . $row1['mname'] . ' ' . $row1['lname']; ?></p>
                         </b>
                         <?php echo $row1['education'] . ' - ' . $row1['department']  ?><br>
-                        <?php echo "<b>Key - " . $row1['unique_key'] . "</b>"; ?>
 
                         <!-- Mutual Followers -->
                         <?php
@@ -198,7 +201,20 @@ if (isset($_GET['user'])) {
                             <div class="w3-third w3-padding">
                                 <div class="w3-card-4">
                                     <a href="post.php?post=<?php echo $row['post_key']; ?>">
-                                        <img src="../media/posts/<?php echo $row['post']; ?>" style="width:100%">
+                                        <?php
+                                        $path_parts = pathinfo($row['post']);
+                                        if (in_array($path_parts['extension'], array("png", "jpg", "jpeg"))) {
+                                        ?>
+                                            <img src="../media/posts/<?php echo $row['post']; ?>" style="width:100%">
+                                        <?php } else { ?>
+                                            <video width="" height="" class="video" id="video" controls loop onload="" controlsList="nodownload nofullscreen" disablePictureInPicture>
+                                                <source src="../media/posts/<?php echo $row['post']; ?>" type="video/mp4">
+                                                <source src="../media/posts/<?php echo $row['post']; ?>" type="video/mov">
+                                                <source src="../media/posts/<?php echo $row['post']; ?>" type="video/webm">
+                                                <source src="../media/posts/<?php echo $row['post']; ?>" type="video/avi">
+                                                <source src="../media/posts/<?php echo $row['post']; ?>" type="video/mkv">
+                                            </video>
+                                        <?php } ?>
                                     </a>
                                     <div class="w3-container w3-left-align">
                                         <p><?php echo $row['caption']; ?></p>
@@ -418,7 +434,6 @@ if (isset($_GET['user'])) {
                         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'")) > 0) {
                             $query9 = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
                             $row9 = mysqli_fetch_array($query9);
-                            echo "Hey";
                     ?>
                             <li class="w3-bar">
                                 <img src="../media/dp/<?php echo $row9['photo']; ?>" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">

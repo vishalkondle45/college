@@ -149,16 +149,16 @@ if (isset($_GET['id'])) {
                             $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$id' AND `following`='$userid'");
                             $row6 = mysqli_fetch_array($query6);
                             if (mysqli_num_rows($query6) == 0) { ?>
-                                <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> Follow </button>
                                 <?php
                             } else {
                                 if ($row6['status'] == 0) {
                                 ?>
-                                    <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info is-outlined follow" id="<?php echo $id; ?>"> Requested </button>
                                 <?php
                                 } else {
                                 ?>
-                                    <button class="button is-info follow" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info follow" id="<?php echo $id; ?>"> Following  </button>
                         <?php
                                 }
                             }
@@ -190,9 +190,9 @@ if (isset($_GET['id'])) {
                 },
                 success: function(data) {
                     if (data == 0) {
-                        t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
+                        t.html('Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
                     } else if (data == 1) {
-                        t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
+                        t.html('Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
                     }
                 }
             })

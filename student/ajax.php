@@ -195,3 +195,17 @@ if ($_POST['action'] == 'compose') {
         echo "sorry";
     }
 }
+
+if ($_POST['action'] == 'accept') {
+    $id = $_POST['id'];
+    if (mysqli_query($conn, "UPDATE follow SET `status`=1 WHERE `id`='$id'")) {
+        echo 1;
+    }
+}
+if ($_POST['action'] == 'reject') {
+    $id = $_POST['id'];
+    if (mysqli_query($conn, "DELETE FROM follow WHERE `id`='$id'")) {
+        // echo 1;
+    }
+    echo "DELETE FROM follow WHERE `id`='$id'";
+}

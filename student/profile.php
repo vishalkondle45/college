@@ -11,13 +11,14 @@ if (isset($_GET['user'])) {
     $query1 = mysqli_query($conn, "SELECT * FROM users WHERE username='$key' AND college_id='$collegeid'");
     $row1 = mysqli_fetch_assoc($query1);
     if (mysqli_num_rows($query1) != 1) {
-        echo "<script>alert('Oversmart!!')</script>";
         echo "<script>window.location.href='profile.php?user=" . $user_id . "'</script>";
     } else {
         $receiver = $row1['id'];
         $posts = mysqli_query($conn, "SELECT * FROM `posts` WHERE `userid`='$receiver'");
         $followers = mysqli_query($conn, "SELECT * FROM `follow` WHERE `following`='$receiver' AND `status`=1 ORDER BY RAND()");
+        echo "SELECT * FROM `follow` WHERE `following`='$receiver' AND `status`=1";
         $following = mysqli_query($conn, "SELECT * FROM `follow` WHERE `follower`='$receiver' AND `status`=1 ORDER BY RAND()");
+        echo "SELECT * FROM `follow` WHERE `follower`='$receiver' AND `status`=1";
     }
 }
 
@@ -62,6 +63,13 @@ if (isset($_GET['user'])) {
     a {
         color: inherit;
     }
+
+    .extra {
+        width: 25px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
 
@@ -87,23 +95,23 @@ if (isset($_GET['user'])) {
                             $row6 = mysqli_fetch_array($query6);
                             // echo "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$receiver'";
                             if (mysqli_num_rows($query6) == 0) { ?>
-                                <button class="button is-info is-outlined follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <button class="button is-info is-outlined follow" style="margin-right: 40px;" id="<?php echo $receiver; ?>"> Follow </button>
                                 <?php
                             } else {
                                 if ($row6['status'] == 0) {
                                 ?>
-                                    <button class="button is-info is-outlined follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info is-outlined follow" id="<?php echo $receiver; ?>"> Requested </button>
                                 <?php
                                 } else {
                                 ?>
-                                    <button class="button is-info follow" id="<?php echo $receiver; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
-                                    <a class="button is-danger" href="chathub.php?user=<?php echo $row1['username']; ?>"> <i class="fa fa-comment"></i> &nbsp; Message &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </a>
+                                    <button class="button is-info follow" style="margin-right: 40px;" id="<?php echo $receiver; ?>"> Following </button>
+                                    <a class="button is-danger" href="chathub.php?user=<?php echo $row1['username']; ?>"> <i class="fa fa-comment"></i> &nbsp; Message </a>
                             <?php
                                 }
                             }
                         } else {
                             ?>
-                            <a href="" class="button is-outlined is-dark">Edit Profile</a>
+                            <a href="edit.php" class="button is-outlined is-dark w3-small">Edit Profile</a>
                         <?php
                         }
                         ?>
@@ -112,53 +120,83 @@ if (isset($_GET['user'])) {
                     <?php
                     $query7 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$receiver' AND `status`=1");
                     ?>
-                    <p class="w3-row">
-                        <!-- Posts -->
-                    <p class="w3-third"> <b><?php echo mysqli_num_rows($posts); ?></b> Posts</p>
-                    <?php
-                    if (mysqli_num_rows($query7) > 0 || $userid == $receiver) {
-                    ?>
-                        <!-- Followers -->
-                        <p class="w3-third" onclick="w3.toggleClass('#followers', 'is-active')"> <b><?php echo mysqli_num_rows($followers); ?></b> Followers</p>
-                        <!-- Following -->
-                        <p class="w3-third" onclick="w3.toggleClass('#followings', 'is-active')"> <b><?php echo mysqli_num_rows($following); ?></b> Following</p>
-                    <?php } else { ?>
-                        <p class="w3-third"> <b><?php echo mysqli_num_rows($followers); ?></b> Followers</p>
-                        <p class="w3-third"> <b><?php echo mysqli_num_rows($following); ?></b> Following</p>
-                    <?php } ?>
-                    </p>
-                    <br>
+
+                    <div class="field is-grouped is-grouped-multiline">
+                        <div class="control" style="margin-right: 40px;">
+                            <div class="tags has-addons are-medium">
+                                <span class="tag is-dark"><?php echo mysqli_num_rows($posts); ?></span>
+                                <span class="tag is-link">Posts</span>
+                            </div>
+                        </div>
+                        <?php
+                        if (mysqli_num_rows($query7) > 0 || $userid == $receiver) {
+                        ?>
+                            <div class="control" style="margin-right: 40px;" onclick="w3.toggleClass('#followers', 'is-active')">
+                                <div class="tags has-addons are-medium">
+                                    <span class="tag is-dark"><?php echo mysqli_num_rows($followers) ?></span>
+                                    <span class="tag is-success">Followers</span>
+                                </div>
+                            </div>
+
+                            <div class="control" onclick="w3.toggleClass('#followings', 'is-active')">
+                                <div class="tags has-addons are-medium">
+                                    <span class="tag is-dark"><?php echo mysqli_num_rows($following) ?></span>
+                                    <span class="tag is-primary">Following</span>
+                                </div>
+                            </div>
+                        <?php } else { ?>
+                            <div class="control" style="margin-right: 40px;">
+                                <div class="tags has-addons are-medium">
+                                    <span class="tag is-dark"><?php echo mysqli_num_rows($followers) ?></span>
+                                    <span class="tag is-success">Followers</span>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <div class="tags has-addons are-medium">
+                                    <span class="tag is-dark"><?php echo mysqli_num_rows($following) ?></span>
+                                    <span class="tag is-primary">Following</span>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
                     <div>
-                        <b>
-                            <p><?php echo $row1['fname'] . ' ' . $row1['mname'] . ' ' . $row1['lname']; ?></p>
-                        </b>
-                        <?php echo $row1['education'] . ' - ' . $row1['department']  ?><br>
+                        <div class="tags are-medium" style="margin-bottom: 0px;margin-top: 10px;">
+                            <span class="tag is-danger"><?php echo $row1['fname'] . ' ' . $row1['mname'] . ' ' . $row1['lname']; ?></span>
+                        </div>
+                        <div class="control">
+                            <div class="tags has-addons">
+                                <span class="tag is-dark w3-small"><?php echo $row1['education']; ?></span>
+                                <span class="tag is-info w3-small"><?php echo $row1['department']; ?></span>
+                            </div>
+                        </div>
+                        <b></b>
 
                         <!-- Mutual Followers -->
-                        <?php
-                        // $query8 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$'")
-                        // if(mysqli_num_rows())
-                        echo "<p>Followed By - ";
-                        $i = 0;
-                        $query8 = mysqli_query($conn, "SELECT * FROM follow WHERE `following`='$receiver'");
-                        while ($row = mysqli_fetch_array($query8)) {
-                            $i++;
-                            $follower = $row['follower'];
-                            if ($follower == $receiver || $follower == $userid) {
-                                continue;
-                            }
-                            if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$follower'")) > 0) {
-                        ?>
-                                <span onclick="w3.toggleClass('#mutual', 'is-active' )"><?php echo $follower; ?></span>,
-                        <?php
-                                if ($i > 3) {
-                                    echo "...";
-                                    break;
+                        <div class="extra" id="mutuals" name="" style="display:none">
+                            <?php
+                            echo "<p>Followed By - ";
+                            $i = 0;
+                            $query8 = mysqli_query($conn, "SELECT * FROM follow WHERE `following`='$receiver'");
+                            while ($row = mysqli_fetch_array($query8)) {
+                                $i++;
+                                $follower = $row['follower'];
+                                if ($follower == $receiver || $follower == $userid) {
+                                    continue;
+                                }
+                                if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$follower'")) > 0) {
+                            ?>
+                                    <span onclick="w3.toggleClass('#mutual', 'is-active' )"><?php echo $follower; ?></span>,
+                            <?php
+                                    if ($i > 3) {
+                                        echo "...";
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        echo "</p>";
-                        ?>
+                            echo "</p>";
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,6 +221,12 @@ if (isset($_GET['user'])) {
                         <a>
                             <span class="icon is-small"><i class="fas fa-poll" aria-hidden="true"></i></span>
                             <span>Polls</span>
+                        </a>
+                    </li>
+                    <li class="tab" id="requests">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-user-circle" aria-hidden="true"></i></span>
+                            <span>Requests</span>
                         </a>
                     </li>
                 </ul>
@@ -303,6 +347,39 @@ if (isset($_GET['user'])) {
                 </ul>
             </div>
 
+            <div class="requests" style="display:none">
+                <ul class="w3-ul w3-white" id="request">
+                    <?php
+                    $forums = mysqli_query($conn, "SELECT * FROM follow WHERE `following` = '$receiver' AND `status`=0 ORDER BY id DESC");
+                    if (mysqli_num_rows($forums) > 0) {
+                        while ($row = mysqli_fetch_array($forums)) {
+                            $follower_id = $row['follower'];
+                            $user = mysqli_query($conn, "SELECT * FROM `users` WHERE id ='$follower_id'");
+                            $row1 = mysqli_fetch_array($user);
+                            $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-pink", "w3-border-purple", "w3-border-amber", "w3-border-aqua", "w3-border-brown", "w3-border-cyan", "w3-border-light-green", "w3-border-indigo", "w3-border-khaki", "w3-hover-border-lime", "w3-border-orange", "w3-border-deep-orange", "w3-border-deep-purple", "w3-border-sand", "w3-border-teal", "w3-border-yellow", "w3-border-black", "w3-border-grey", "w3-border-light-grey", "w3-border-dark-grey");
+                    ?>
+                            <li class="w3-bar w3-leftbar <?php echo $array[mt_rand(0, 22)]; ?> w3-border-0">
+                                <div class="w3-bar-item w3-left">
+                                    <a href="profile.php?user=<?php echo $row1['username']; ?>" style="text-decoration: none; color:black;">
+                                        <span class="ellipsis w3-large"><?php echo $row1['username']; ?></span>
+                                    </a>
+                                </div>
+                                <div class="w3-bar-item w3-right w3-border-left">
+                                    <button class="is-success button accept" id="<?php echo $row['id']; ?>"> <i class="fa fa-check-circle"></i> &nbsp; Accept</button>
+                                    &emsp;
+                                    <button class="is-danger button reject" id="<?php echo $row['id']; ?>"> <i class="fa fa-ban"></i> &nbsp; Reject</button>
+                                </div>
+                            </li>
+                            <hr style="margin-top: 5px;margin-bottom: 5px;">
+                    <?php
+                        }
+                    } else {
+                        echo "<h1>No Requests</h1>";
+                    }
+                    ?>
+                </ul>
+            </div>
+
         </div>
         <div class="w3-col w3-hide-small" style="width:20%"></div>
     </div>
@@ -340,16 +417,16 @@ if (isset($_GET['user'])) {
                             }
                             // echo "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'";
                             if (mysqli_num_rows($query6) == 0) { ?>
-                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Follow </button>
                                 <?php
                             } else {
                                 if ($row6['status'] == 0) {
                                 ?>
-                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Requested </button>
                                 <?php
                                 } else {
                                 ?>
-                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> Following  </button>
                             <?php
                                 }
                             }
@@ -391,16 +468,16 @@ if (isset($_GET['user'])) {
                             $query6 = mysqli_query($conn, "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'");
                             $row6 = mysqli_fetch_array($query6);
                             if (mysqli_num_rows($query6) == 0) { ?>
-                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Follow </button>
                                 <?php
                             } else {
                                 if ($row6['status'] == 0) {
                                 ?>
-                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Requested </button>
                                 <?php
                                 } else {
                                 ?>
-                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> Following  </button>
                             <?php
                                 }
                             }
@@ -449,16 +526,16 @@ if (isset($_GET['user'])) {
                                 }
                                 // echo "SELECT * FROM follow WHERE `follower`='$userid' AND `following`='$id'";
                                 if (mysqli_num_rows($query6) == 0) { ?>
-                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                    <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Follow </button>
                                     <?php
                                 } else {
                                     if ($row6['status'] == 0) {
                                     ?>
-                                        <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                        <button class="button is-info is-outlined follow w3-right" id="<?php echo $id; ?>"> Requested </button>
                                     <?php
                                     } else {
                                     ?>
-                                        <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> <i class="fa fa-user-check"></i> &nbsp; Following &emsp; <span class="tag"><?php echo mysqli_num_rows($query6) ?></span> </button>
+                                        <button class="button is-info follow w3-right" id="<?php echo $id; ?>"> Following  </button>
                                 <?php
                                     }
                                 }
@@ -500,9 +577,9 @@ if (isset($_GET['user'])) {
                             },
                             success: function(data) {
                                 if (data == 0) {
-                                    t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
+                                    t.html('Follow');
                                 } else if (data == 1) {
-                                    t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
+                                    t.html('Requested ');
                                 }
                             }
                         })
@@ -517,9 +594,9 @@ if (isset($_GET['user'])) {
                         },
                         success: function(data) {
                             if (data == 0) {
-                                t.html('<i class="fa fa-user-plus"></i> &nbsp; Follow &emsp; <span class="tag is-info">' + followers-- + '</span>');
+                                t.html('Follow ');
                             } else if (data == 1) {
-                                t.html('<i class="fa fa-user-circle"></i> &nbsp; Requested &emsp; <span class="tag is-info">' + ++followers + '</span>');
+                                t.html('Requested');
                             }
                         }
                     })
@@ -527,9 +604,43 @@ if (isset($_GET['user'])) {
             });
         });
 
-        // 
+        // Delete
         $(".delete").click(function() {
             $(this).parent("header").parent("div").parent("div").toggleClass("is-active");
+        });
+
+        //Accept Follow Request
+        $(".accept").click(function() {
+            var id = $(this).attr("id");
+            var t = $(this);
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'accept',
+                    id: id
+                },
+                success: function(data) {
+                    t.parent("div").parent("li").hide();
+                }
+            });
+        });
+
+        //Reject Follow Request
+        $(".reject").click(function() {
+            var id = $(this).attr("id");
+            var t = $(this);
+            $.ajax({
+                url: "ajax.php",
+                type: "POST",
+                data: {
+                    action: 'reject',
+                    id: id
+                },
+                success: function(data) {
+                    t.parent("div").parent("li").hide();
+                }
+            });
         });
 
         // Tabs
@@ -538,17 +649,25 @@ if (isset($_GET['user'])) {
             $(this).addClass("is-active");
             var choice = $(this).attr("id");
             if (choice == "posts") {
-                $(".posts").show();
                 $(".forums").hide();
                 $(".polls").hide();
+                $(".requests").hide();
+                $(".posts").show();
             } else if (choice == "forums") {
                 $(".posts").hide();
-                $(".forums").show();
                 $(".polls").hide();
+                $(".requests").hide();
+                $(".forums").show();
             } else if (choice == "polls") {
                 $(".posts").hide();
                 $(".forums").hide();
+                $(".requests").hide();
                 $(".polls").show();
+            } else if (choice == "requests") {
+                $(".posts").hide();
+                $(".forums").hide();
+                $(".polls").hide();
+                $(".requests").show();
             }
         });
     });

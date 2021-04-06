@@ -1,0 +1,16 @@
+College
+
+***Adding***
+Add Student \
+Add Teacher \
+Add Class \
+Add Year \
+Add Notice \
+
+***Managing***
+Manage Students \ 
+Manage Teachers \
+Manage Notice \
+Manage Posts \
+Manage Polls \
+Manage Forums \

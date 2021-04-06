@@ -6,7 +6,7 @@ include_once 'session.php';
 if (isset($_POST['submit'])) {
     $question = $_POST['question'];
     if (mysqli_query($conn, "INSERT INTO poll VALUES(NULL, '$question', '$collegeid', '$usertype', '$userid', current_timestamp())")) {
-        $query = mysqli_query($conn, "SELECT * FROM poll WHERE question = '$question' ORDER BY id DESC LIMIT 1");
+        $query = mysqli_query($conn, "SELECT * FROM poll WHERE question = '$question' AND college_id = '$collegeid' AND poll_by = '$usertype' AND `user_id` = '$userid' ORDER BY id DESC LIMIT 1");
         $row = mysqli_fetch_array($query);
         $poll_id = $row['id'];
         foreach ($_POST['options'] as $selected) {
@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
                 // echo "<script>alert('Working')</script>";
             }
         }
-        echo "<script>window.location.href='new_poll.php'</script>";
+        echo "<script>window.location.href='polls.php'</script>";
     }
 }
 

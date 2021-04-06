@@ -53,7 +53,8 @@ if (isset($_POST['upload'])) {
 
     <br><br><br>
     <div class="w3-container w3-responsive">
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <input type="text" class="w3-input" oninput="w3.filterHTML('#id01', '.item', this.value)" placeholder="Search Keywords..">
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" id="id01">
             <thead>
                 <tr class="is-selected">
                     <th>#</th>
@@ -67,15 +68,15 @@ if (isset($_POST['upload'])) {
             </thead>
             <tbody>
                 <?php
-                $notes = mysqli_query($conn, "SELECT * FROM `assignment` WHERE `department`='CSE'");
+                $notes = mysqli_query($conn, "SELECT * FROM `assignment` WHERE `department`='$user_department' AND `year`='$user_year'");
                 while ($row = mysqli_fetch_assoc($notes)) {
                     $assignment_id = $row['id'];
                     $teacher_id = $row['shared_by'];
                     $teacher = mysqli_query($conn, "SELECT * FROM users WHERE id = '$teacher_id'");
                     $row1 = mysqli_fetch_assoc($teacher);
-                    $query3 = mysqli_query($conn, "SELECT * FROM `submissions` WHERE `assignment_id`='$assignment_id'");
+                    $query3 = mysqli_query($conn, "SELECT * FROM `submissions` WHERE `assignment_id`='$assignment_id' AND `user_id`='$userid'");
                 ?>
-                    <tr>
+                    <tr class="item">
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo $row['subject']; ?></td>
                         <td><?php echo $row1['fname'] . ' ' . $row1['lname']; ?></td>

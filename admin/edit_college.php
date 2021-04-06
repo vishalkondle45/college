@@ -61,7 +61,7 @@ if (isset($_POST['update'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colleges</title>
+    <title>Edit College</title>
 </head>
 <style>
     .image-cropper {
@@ -90,7 +90,7 @@ if (isset($_POST['update'])) {
         <form action="" method="post" enctype="multipart/form-data">
             <!-- Name -->
             <div class="field">
-                <label class="label">Name</label>
+                <label class="label w3-left-align">Name</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="text" name="name" placeholder="Enter First Name" value="<?php echo $row['name'] ?>">
                     <span class="icon is-small is-left">
@@ -100,7 +100,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Username</label>
+                <label class="label w3-left-align">Username</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="text" name="username" placeholder="Enter Username" value="<?php echo $row['username'] ?>">
                     <span class="icon is-small is-left">
@@ -110,7 +110,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Password</label>
+                <label class="label w3-left-align">Password</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="password" name="password" placeholder="Enter Password" value="<?php echo $row['password'] ?>">
                     <span class="icon is-small is-left">
@@ -120,7 +120,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Email</label>
+                <label class="label w3-left-align">Email</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="email" name="email" placeholder="Enter Email" value="<?php echo $row['email'] ?>">
                     <span class="icon is-small is-left">
@@ -130,7 +130,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Mobile</label>
+                <label class="label w3-left-align">Mobile</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="number" name="mobile" maxlength="10" minlength="10" placeholder="Enter Mobile Number" value="<?php echo $row['mobile'] ?>">
                     <span class="icon is-small is-left">
@@ -140,7 +140,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Address</label>
+                <label class="label w3-left-align">Address</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="text" name="address" placeholder="Enter Address" value="<?php echo $row['address'] ?>">
                     <span class="icon is-small is-left">
@@ -150,7 +150,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">City</label>
+                <label class="label w3-left-align">City</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="text" name="city" placeholder="Enter City Name" value="<?php echo $row['city'] ?>">
                     <span class="icon is-small is-left">
@@ -160,7 +160,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Pincode</label>
+                <label class="label w3-left-align">Pincode</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input" type="number" name="pincode" placeholder="Enter Pincode" value="<?php echo $row['pincode'] ?>">
                     <span class="icon is-small is-left">
@@ -170,7 +170,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Photo</label>
+                <label class="label w3-left-align">Photo</label>
                 <div class="controls">
                     <input type="file" name="photo" id="" value="../media/logo/<?php echo $row['logo'] ?>" accept="image/*" onchange="readURL(this);">
                     <img id="blah" src="../media/logo/<?php echo $row['logo'] ?>" alt="your image" class="is-128x128" />
@@ -178,7 +178,7 @@ if (isset($_POST['update'])) {
             </div>
 
             <div class="field">
-                <label class="label">Status</label>
+                <label class="label w3-left-align">Status</label>
                 <div class="select">
                     <select name="status" id="">
                         <?php

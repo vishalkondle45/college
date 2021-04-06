@@ -3,10 +3,10 @@ include_once 'header.php';
 include_once 'session.php';
 if (isset($_POST['submit'])) {
     $forum = $_POST['topic'];
-    if (mysqli_query($conn, "INSERT INTO forums VALUES(NULL, '$userid', '$collegeid', '$forum', NULL)")) {
+    if (mysqli_query($conn, "INSERT INTO forums VALUES(NULL, '$usertype', '$userid', '$collegeid', '$forum', NULL)")) {
         echo "<script>window.location='forums.php'</script>";
     } else {
-        echo "INSERT INTO forums VALUES(NULL, '$userid', '$collegeid', '$forum', NULL)";
+        echo "INSERT INTO forums VALUES(NULL, '$usertype', '$userid', '$collegeid', '$forum', NULL)";
         echo "<script>alert('Failure!!')</script>";
         echo "<script>window.location='forums.php'</script>";
     }
@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CollegeWeb</title>
+    <title>Forums</title>
 </head>
 <style>
     .image-cropper {
@@ -74,7 +74,12 @@ if (isset($_POST['submit'])) {
                 while ($row = mysqli_fetch_array($forums)) {
                     $id = $row['user_id'];
                     $forum_id = $row['id'];
-                    $user = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+
+                    if ($id != 0)
+                        $user = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                    else
+                        $user = mysqli_query($conn, "SELECT * FROM college WHERE id ='$collegeid'");
+
                     $row1 = mysqli_fetch_array($user);
                     $replies = mysqli_query($conn, "SELECT * FROM forum_replies WHERE `forum_id`='$forum_id'");
                     $views = mysqli_query($conn, "SELECT * FROM views WHERE `content_id`='$forum_id' AND `content`='forum'");
@@ -95,7 +100,12 @@ if (isset($_POST['submit'])) {
                         </div>
                         <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
                             <div class="image-cropper is-48x48">
-                                <img src="../media/dp/<?php echo $row1['photo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php
+                                if ($id != 0) { ?>
+                                    <img src="../media/dp/<?php echo $row1['photo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php } else { ?>
+                                    <img src="../media/logo/<?php echo $row1['logo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php } ?>
                             </div>
                         </figure>
                         <div class="w3-bar-item w3-right w3-border-right">

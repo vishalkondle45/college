@@ -14,10 +14,6 @@ include_once 'session.php';
 <!-- Navigation Bar Starts -->
 <nav class="navbar is-info is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-        </a>
-
         <a role="button" class="navbar-burger" aria-label="menu" onclick="w3.toggleClass('.navbar-menu','is-active')" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -27,7 +23,7 @@ include_once 'session.php';
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item" href="dashboard.php">
+            <a class="navbar-item" href="index.php">
                 <i class="fa fa-dashboard"></i> &nbsp; Dashboard
             </a>
 
@@ -69,6 +65,35 @@ include_once 'session.php';
                     </a>
                     <a class="navbar-item" href="students.php">
                         <i class="fa fa-users"></i> &nbsp; Students
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <p class="navbar-link">
+                    Manage
+                </p>
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="posts.php">
+                        <i class="fa fa-image"></i> &nbsp; Posts
+                    </a>
+                    <a class="navbar-item" href="forums.php">
+                        <i class="fa fa-comments"></i> &nbsp; Forums
+                    </a>
+                    <a class="navbar-item" href="polls.php">
+                        <i class="fa fa-poll"></i> &nbsp; Polls
+                    </a>
+                    <a class="navbar-item" href="noticeboard.php">
+                        <i class="fa fa-chalkboard-teacher"></i> &nbsp; Noticeboard
+                    </a>
+                    <a class="navbar-item" href="years.php">
+                        <i class="fa fa-address-card"></i> &nbsp; Years
+                    </a>
+                    <a class="navbar-item" href="departments.php">
+                        <i class="fa fa-id-card"></i> &nbsp; Departments
+                    </a>
+                    <a class="navbar-item" href="education.php">
+                        <i class="fa fa-university"></i> &nbsp; Education
                     </a>
                 </div>
             </div>

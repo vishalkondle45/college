@@ -76,7 +76,7 @@ $row = mysqli_fetch_assoc($query);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colleges</title>
+    <title>Edit</title>
 </head>
 <style>
     .image-cropper {
@@ -135,7 +135,7 @@ $row = mysqli_fetch_assoc($query);
             <div class="field">
                 <label class="label">Username</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="text" name="username" placeholder="Enter Username" value="<?php echo $row['username'] ?>">
+                    <input class="input" type="text" name="username" id="username" placeholder="Enter Username" value="<?php echo $row['username'] ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                     </span>
@@ -145,7 +145,7 @@ $row = mysqli_fetch_assoc($query);
             <div class="field">
                 <label class="label">Password</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="password" name="password" placeholder="Enter Password" value="<?php echo $row['password'] ?>">
+                    <input class="input" type="password" id="password" name="password" placeholder="Enter Password" value="<?php echo $row['password'] ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
@@ -155,7 +155,7 @@ $row = mysqli_fetch_assoc($query);
             <div class="field">
                 <label class="label">Email</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="email" name="email" placeholder="Enter Email" value="<?php echo $row['email'] ?>">
+                    <input class="input" type="email" id="email" name="email" placeholder="Enter Email" value="<?php echo $row['email'] ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                     </span>
@@ -165,7 +165,7 @@ $row = mysqli_fetch_assoc($query);
             <div class="field">
                 <label class="label">Mobile</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="number" name="mobile" maxlength="10" minlength="10" placeholder="Enter Mobile Number" value="<?php echo $row['mobile'] ?>">
+                    <input class="input" type="number" id="mobile" name="mobile" maxlength="10" minlength="10" placeholder="Enter Mobile Number" value="<?php echo $row['mobile'] ?>">
                     <span class="icon is-small is-left">
                         <i class="fas fa-phone-alt"></i>
                     </span>
@@ -333,4 +333,93 @@ $row = mysqli_fetch_assoc($query);
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    $("#username").change(function() {
+        var text = $("#username").val();
+        $.ajax({
+            url: "ajax.php",
+            type: "POST",
+            data: {
+                action: 'check_username',
+                text: text
+            },
+            success: function(data) {
+                if (data == "1") {
+                    $("#username").attr('placeholder', " Already in Use!!");
+                    $("#username").addClass('is-danger');
+                    $("#username").focus();
+                    $("#username").val('');
+                }
+            }
+        });
+    });
+
+    $("#password").change(function() {
+        $("#password").each(function() {
+            var validated = true;
+            if (this.value.length < 8)
+                validated = false;
+            if (!/\d/.test(this.value))
+                validated = false;
+            if (!/[a-z]/.test(this.value))
+                validated = false;
+            if (!/[A-Z]/.test(this.value))
+                validated = false;
+            var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            if (format.test(this.value)) {} else {
+                validated = false;
+            }
+
+            if (!validated) {
+                $("#password").val('');
+                $("#password").attr('placeholder', "Password Must Be Strong!! Eg. 'Admin@123'");
+                $("#password").addClass('is-danger');
+                $("#password").focus();
+            } else {
+                $("#password").removeClass('is-danger');
+            }
+        });
+    });
+
+    $("#email").change(function() {
+        var text = $("#email").val();
+        // alert(text);
+        $.ajax({
+            url: "ajax.php",
+            type: "POST",
+            data: {
+                action: 'check_email',
+                text: text
+            },
+            success: function(data) {
+                if (data == "1") {
+                    $("#email").attr('placeholder', " Already in Use!!");
+                    $("#email").addClass('is-danger');
+                    $("#email").focus();
+                    $("#email").val('');
+                }
+            }
+        });
+    });
+
+    $("#mobile").change(function() {
+        var text = $("#mobile").val();
+        // alert(text);
+        $.ajax({
+            url: "ajax.php",
+            type: "POST",
+            data: {
+                action: 'check_mobile',
+                text: text
+            },
+            success: function(data) {
+                if (data == "1") {
+                    $("#mobile").val('');
+                    $("#mobile").attr('placeholder', " Already in Use!!");
+                    $("#mobile").addClass('is-danger');
+                    $("#mobile").focus();
+                }
+            }
+        });
+    });
 </script>

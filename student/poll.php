@@ -26,7 +26,11 @@ if (isset($_GET['id'])) {
     }
     $id = $row['user_id'];
     $poll_by = $row['poll_by'];
-    $query1 = mysqli_query($conn, "SELECT * FROM `$poll_by` WHERE `id`='$id'");
+    if ($poll_by != 'college') {
+        $query1 = mysqli_query($conn, "SELECT * FROM `$poll_by` WHERE `id`='$id'");
+    } else {
+        $query1 = mysqli_query($conn, "SELECT * FROM `$poll_by` WHERE `id`='$collegeid'");
+    }
     $row1 = mysqli_fetch_array($query1);
 
     if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM views WHERE `content`='poll' AND `content_id`='$forum_id' AND `viewer_id`='$userid'")) == 0) {

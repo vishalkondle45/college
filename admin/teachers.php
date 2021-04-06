@@ -11,7 +11,7 @@ $students = mysqli_query($conn, "SELECT * FROM users WHERE usertype='teacher'");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colleges</title>
+    <title>Students</title>
 </head>
 <style>
     .image-cropper {
@@ -37,7 +37,8 @@ $students = mysqli_query($conn, "SELECT * FROM users WHERE usertype='teacher'");
     <br>
     <!-- Main Content -->
     <div class="table-container section">
-        <table class="table is-striped is-narrow is-hoverable">
+        <input type="text" class="w3-input" oninput="w3.filterHTML('#id01', '.item', this.value)" placeholder="Search Keywords..">
+        <table class="table is-striped is-narrow is-hoverable" id="id01">
             <thead>
                 <tr class="is-selected">
                     <th>#</th>
@@ -62,7 +63,7 @@ $students = mysqli_query($conn, "SELECT * FROM users WHERE usertype='teacher'");
                 <?php
                 while ($row = mysqli_fetch_assoc($students)) {
                 ?>
-                    <tr class="">
+                    <tr class="item">
                         <td><?php echo $row['id'] ?></td>
                         <td><?php echo $row['college_id'] ?></td>
                         <td><?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
@@ -92,7 +93,7 @@ $students = mysqli_query($conn, "SELECT * FROM users WHERE usertype='teacher'");
                         <td>
                             <a href="delete.php?id=<?php echo $row['id'] ?>&user=teacher">
                                 <button class="button is-danger">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                             </a>
                         </td>

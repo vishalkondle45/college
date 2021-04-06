@@ -191,7 +191,11 @@ if (isset($_GET['post'])) {
                         $all_comments = mysqli_query($conn, "SELECT * FROM comments WHERE `post_id`='$postid' ORDER BY id DESC");
                         while ($comment = mysqli_fetch_assoc($all_comments)) {
                             $current_user = $comment['commenter_id'];
-                            $user = mysqli_query($conn, "SELECT * FROM users WHERE id='$current_user'");
+                            if ($current_user != 0) {
+                                $user = mysqli_query($conn, "SELECT * FROM users WHERE id='$current_user'");
+                            } else {
+                                $user = mysqli_query($conn, "SELECT * FROM college WHERE id='$collegeid'");
+                            }
                             $user = mysqli_fetch_assoc($user);
 
                             $time = strtotime($comment['time']);
@@ -200,7 +204,15 @@ if (isset($_GET['post'])) {
                             <article class="media">
                                 <figure class="media-left">
                                     <div class="image-cropper is-48x48">
-                                        <img src="../media/dp/<?php echo $user['photo'] ?>" alt="" srcset="" class="profile-pic">
+                                        <?php
+                                        if ($current_user != 0) { ?>
+                                            <img src="../media/dp/<?php echo $user['photo'] ?>" alt="" srcset="" class="profile-pic">
+                                        <?php
+                                        } else { ?>
+                                            <img src="../media/logo/<?php echo $user['logo'] ?>" alt="" srcset="" class="profile-pic">
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </figure>
                                 <div class="media-content">

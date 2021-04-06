@@ -37,7 +37,8 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
     <br>
     <!-- Main Content -->
     <div class="table-container section">
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <input type="text" class="w3-input" oninput="w3.filterHTML('#id01', '.item', this.value)" placeholder="Search Keywords..">
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" id="id01">
             <thead>
                 <tr class="is-selected">
                     <th>#</th>
@@ -58,7 +59,7 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
                 <?php
                 while ($row = mysqli_fetch_assoc($colleges)) {
                 ?>
-                    <tr>
+                    <tr class="item">
                         <td><?php echo $row['id'] ?></td>
                         <td><?php echo $row['name'] ?></td>
                         <td><?php echo $row['username'] ?></td>
@@ -75,16 +76,16 @@ $colleges = mysqli_query($conn, "SELECT * FROM college");
                         </td>
                         <td><?php echo $row['status'] ?></td>
                         <td>
-                            <a href="edit.php?id=<?php echo $row['id'] ?>&user=college">
+                            <a href="edit_college.php?id=<?php echo $row['id'] ?>">
                                 <button class="button is-info">
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </a>
                         </td>
                         <td>
-                            <a href="delete.php?id=<?php echo $row['id'] ?>&user=college">
+                            <a href="delete.php?id=<?php echo $row['id'] ?>">
                                 <button class="button is-danger">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                             </a>
                         </td>

@@ -1,5 +1,6 @@
 <?php
 include_once 'header.php';
+// echo $college_name;
 if (isset($_POST['post'])) {
     if (!(empty($_FILES['file']['name']))) {
         $tempname = $_FILES["file"]["tmp_name"];
@@ -16,11 +17,11 @@ if (isset($_POST['post'])) {
     }
     $key = md5(time() + 3);
     $caption = nl2br($_POST['caption']);
-    if (mysqli_query($conn, "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$filename', '$caption', '$key', NULL)")) {
+    if (mysqli_query($conn, "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$collegeid', '$filename', '$caption', '$key', NULL)")) {
         echo "<script>location.href='index.php'</script>";
     } else {
         echo "<script>alert('Failure')</script>";
-        echo "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$filename', '$caption', '$key', NULL)";
+        echo "INSERT INTO posts VALUES(NULL, '$userid', '$usertype', '$collegeid', '$filename', '$caption', '$key', NULL)";
     }
 }
 ?>
@@ -78,10 +79,18 @@ if (isset($_POST['post'])) {
             $post = mysqli_query($conn, "SELECT * FROM posts order by id desc");
             while ($posts = mysqli_fetch_assoc($post)) {
                 $id = $posts['userid'];
-                $poster = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
-                $poster = mysqli_fetch_assoc($poster);
-                if ($user_row['college_id'] != $poster['college_id']) {
-                    continue;
+                if ($id != 0) {
+                    $poster = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
+                    $poster = mysqli_fetch_assoc($poster);
+                    if ($collegeid != $poster['college_id']) {
+                        continue;
+                    }
+                } else {
+                    $poster = mysqli_query($conn, "SELECT * FROM college WHERE id='$collegeid'");
+                    $poster = mysqli_fetch_assoc($poster);
+                    if ($collegeid != $poster['id']) {
+                        continue;
+                    }
                 }
                 $postid = $posts['id'];
                 $likes = mysqli_query($conn, "SELECT * FROM likes WHERE post_id='$postid'");
@@ -91,8 +100,17 @@ if (isset($_POST['post'])) {
                     <!-- Post Header -->
                     <div class="message-header level">
                         <div class="level-left">
-                            <div class="image-cropper w3-margin-right">
-                                <img src="../media/dp/<?php echo $poster['photo'] ?>" alt="" srcset="" class="profile-pic">
+                            <div class="image-cropper is-48x48">
+                                <?php
+                                if ($id != 0) { ?>
+                                    <img src="../media/dp/<?php echo $poster['photo'] ?>" alt="" srcset="" class="profile-pic">
+                                <?php
+                                } else { ?>
+                                    <img src="../media/logo/<?php echo $poster['logo'] ?>" alt="" srcset="" class="profile-pic">
+                                <?php
+                                }
+                                echo $row1['logo'];
+                                ?>
                             </div>
                         </div>
                         <a href="profile.php?user=<?php echo $poster['username'] ?>" style="text-decoration: none;"><?php echo $poster['username'] ?></a>
@@ -232,8 +250,12 @@ if (isset($_POST['post'])) {
                             <?php
                             $all_comments = mysqli_query($conn, "SELECT * FROM comments WHERE `post_id`='$postid' ORDER BY id DESC");
                             while ($comment = mysqli_fetch_assoc($all_comments)) {
+
                                 $current_user = $comment['commenter_id'];
-                                $user = mysqli_query($conn, "SELECT * FROM users WHERE id='$current_user'");
+                                if ($current_user != 0)
+                                    $user = mysqli_query($conn, "SELECT * FROM users WHERE id='$current_user'");
+                                else
+                                    $user = mysqli_query($conn, "SELECT * FROM college WHERE id='$collegeid'");
                                 $user = mysqli_fetch_assoc($user);
 
                                 $time = strtotime($comment['time']);
@@ -242,7 +264,12 @@ if (isset($_POST['post'])) {
                                 <article class="media">
                                     <figure class="media-left">
                                         <div class="image-cropper is-48x48">
-                                            <img src="../media/dp/<?php echo $user['photo'] ?>" alt="" srcset="" class="profile-pic">
+                                            <?php
+                                            if ($current_user != 0) { ?>
+                                                <img src="../media/dp/<?php echo $user['photo'] ?>" alt="" srcset="" class="profile-pic">
+                                            <?php } { ?>
+                                                <img src="../media/logo/<?php echo $user['logo'] ?>" alt="" srcset="" class="profile-pic">
+                                            <?php } ?>
                                         </div>
                                     </figure>
                                     <div class="media-content">

@@ -29,7 +29,8 @@ include_once 'session.php';
 
     <br><br><br>
     <div class="w3-container w3-responsive">
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+        <input type="text" class="w3-input" oninput="w3.filterHTML('#id01', '.item', this.value)" placeholder="Search Keywords..">
+        <table class="table is-striped is-narrow is-hoverable is-fullwidth" id="id01">
             <thead>
                 <tr class="is-selected">
                     <th>#</th>
@@ -47,7 +48,7 @@ include_once 'session.php';
                     $teacher = mysqli_query($conn, "SELECT * FROM users WHERE id = '$teacher_id'");
                     $row1 = mysqli_fetch_assoc($teacher);
                 ?>
-                    <tr>
+                    <tr class="item">
                         <td><?php echo $row['id']; ?></td>
                         <td><?php echo $row['subject']; ?></td>
                         <td><?php echo $row1['fname'] . ' ' . $row1['lname']; ?></td>

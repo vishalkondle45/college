@@ -22,10 +22,10 @@ if (isset($_GET['id'])) {
 }
 if (isset($_POST['reply'])) {
     $reply_text = nl2br($_POST['reply_text']);
-    if (mysqli_query($conn, "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$userid', '$reply_text', current_timestamp())")) {
+    if (mysqli_query($conn, "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_type`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$usertype', '$userid', '$reply_text', current_timestamp())")) {
         echo "<script>window.location.href='forum.php?id=" . $forum_id . "'</script>";
     } else {
-        echo "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$userid', '$reply_text', current_timestamp())";
+        echo "INSERT INTO `forum_replies` (`id`, `forum_id`, `replier_type`, `replier_id`, `reply`, `time`) VALUES (NULL, '$forum_id', '$usertype', '$userid', '$reply_text', current_timestamp())";
     }
 }
 ?>

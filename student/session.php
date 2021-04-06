@@ -11,11 +11,20 @@ $usertype = $_SESSION['usertype'] = 'users';
 $userid = $_SESSION['userid'];
 $collegeid = $_SESSION['collegeid'];
 
+$query = mysqli_query($conn, "SELECT * FROM college WHERE id = '$collegeid'");
+$row = mysqli_fetch_array($query);
+if ($row['status'] == 0) {
+    echo "<script>alert('Your College Account is Currently Deactivate!! Contact Admin!');window.location.href='../index.php';</script>";
+}
+$college_name = $row['username'];
+
 $query1 = mysqli_query($conn, "SELECT * FROM users WHERE `id`='$userid'");
 $user_row = mysqli_fetch_assoc($query1);
 $user_key = $user_row['unique_key'];
 $email = $user_row['email'];
 $user_id = $user_row['username'];
+$user_department = $user_row['department'];
+$user_year = $user_row['education'];
 $flname = $user_row['fname'] . ' ' . $user_row['lname'];
 
 $query2 = mysqli_query($conn, "SELECT * FROM college WHERE `id`='$collegeid'");

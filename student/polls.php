@@ -10,7 +10,7 @@ $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CollegeWeb</title>
+    <title>Polls</title>
 </head>
 <style>
     .image-cropper {
@@ -66,7 +66,15 @@ $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-
                     $id = $row['user_id'];
                     $poll_by = $row['poll_by'];
                     $forum_id = $row['id'];
-                    $user = mysqli_query($conn, "SELECT * FROM `$poll_by` WHERE id ='$id'");
+
+                    if ($id != 0) {
+                        $user = mysqli_query($conn, "SELECT * FROM users WHERE id ='$id'");
+                        // echo "SELECT * FROM users WHERE id ='$id'";
+                    } else {
+                        $user = mysqli_query($conn, "SELECT * FROM college WHERE id ='$collegeid'");
+                        // echo "SELECT * FROM college WHERE id ='$collegeid'";
+                    }
+
                     $row1 = mysqli_fetch_array($user);
                     $replies = mysqli_query($conn, "SELECT * FROM results WHERE `poll_id`='$forum_id'");
                     $views = mysqli_query($conn, "SELECT * FROM options WHERE `poll_id`='$forum_id'");
@@ -87,7 +95,12 @@ $array = array("w3-border-red", "w3-border-blue", "w3-border-green", "w3-border-
                         </div>
                         <figure class="w3-bar-item w3-right media-left" style="margin: 0; padding-right: 0;">
                             <div class="image-cropper is-48x48">
-                                <img src="../media/dp/<?php echo $row1['photo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php
+                                if ($id != 0) { ?>
+                                    <img src="../media/dp/<?php echo $row1['photo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php } else { ?>
+                                    <img src="../media/logo/<?php echo $row1['logo']; ?>" alt="" srcset="" class="profile-pic">
+                                <?php } ?>
                             </div>
                         </figure>
                         <div class="w3-bar-item w3-right w3-border-right">

@@ -29,14 +29,19 @@ if (isset($_POST['login'])) {
         echo "<script>alert('Something Wrong'); window.location.href='index.php'</script>";
     }
 
-    if (mysqli_num_rows($query)) {
+    if (mysqli_num_rows($query) == 1) {
 
         $_SESSION['role'] = $usertype;
         $_SESSION['usertype'] = $_POST['usertype'];
         $_SESSION['username'] = $_POST['username'];
 
         $row = mysqli_fetch_array($query);
-        $_SESSION['collegeid'] = $row['college_id'];
+
+        if ($usertype != 'college' && $usertype != 'admin')
+            $_SESSION['collegeid'] = $row['college_id'];
+        else
+            $_SESSION['collegeid'] = $row['id'];
+
         $_SESSION['userid'] = $row['id'];
         $_SESSION['id'] = $id = $row['id'];
 
@@ -119,9 +124,10 @@ if (isset($_POST['message'])) {
     <!-- SlideShow Starts -->
     <div class="container" id="home">
         <br>
-        <img class="nature" src="https://www.w3schools.com/w3js/img_snowtops.jpg" width="100%">
-        <img class="nature" src="https://www.w3schools.com/w3js/img_mountains.jpg" width="100%">
-        <img class="nature" src="https://www.w3schools.com/w3js/img_nature.jpg" width="100%">
+        <img class="nature" src="media/images/slideshow/1.jpg" width="100%">
+        <img class="nature" src="media/images/slideshow/2.jpg" width="100%">
+        <img class="nature" src="media/images/slideshow/3.jpg" width="100%">
+        <img class="nature" src="media/images/slideshow/4.jpg" width="100%">
         <br>
     </div>
     <!-- SlideShow Ends -->
@@ -142,11 +148,11 @@ if (isset($_POST['message'])) {
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            <img src="media/images/noticeboard.png" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-6">Feature 1</p>
+                        <p class="title is-6">Online Noticeboard</p>
                     </div>
                 </div>
             </div>
@@ -154,11 +160,11 @@ if (isset($_POST['message'])) {
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            <img src="media/images/forums.png" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-6">Feature 2</p>
+                        <p class="title is-6">Forums</p>
                     </div>
                 </div>
             </div>
@@ -166,11 +172,11 @@ if (isset($_POST['message'])) {
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            <img src="media/images/polls.png" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-6">Feature 3</p>
+                        <p class="title is-6">Polls</p>
                     </div>
                 </div>
             </div>
@@ -178,11 +184,11 @@ if (isset($_POST['message'])) {
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            <img src="media/images/chathub.png" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-6">Feature 4</p>
+                        <p class="title is-6">ChatHub</p>
                     </div>
                 </div>
             </div>
@@ -190,11 +196,11 @@ if (isset($_POST['message'])) {
                 <div class="card">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                            <img src="media/images/assignments.png" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
-                        <p class="title is-6">Feature 5</p>
+                        <p class="title is-6">Assignments</p>
                     </div>
                 </div>
             </div>
@@ -209,37 +215,28 @@ if (isset($_POST['message'])) {
             <div class="message-header">
                 <p>About Us</p>
             </div>
-            <div class="message-body">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+            <div class="message-body w3-justify">
+                <strong>CollegeWeb</strong> is our B.Tech final year project. Our Intention is clear we are going to make this project more attractive. Our Project Guide for this project is <strong>Mrs. A.A.Kulkarni</strong>. and we have developed this web application under <strong>Oskar Technologies</strong>. We have Completed our B.Tech in <strong>Vidya Vikas Prathishtan Institute of Engineering & Technology, Solapur</strong>. We are hoping you will like it.
             </div>
         </article>
         <div class="columns">
             <div class="column">
                 <div class="card">
                     <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <figure class="image">
+                            <img src="media/images/avtar/Vishal1.jpg" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
                         <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                                </figure>
-                            </div>
                             <div class="media-content">
-                                <p class="title is-4">John Smith</p>
-                                <p class="subtitle is-6">@johnsmith</p>
+                                <p class="title is-4">Vishal Kondle</p>
+                                <p class="subtitle is-6"><a>#Leader</a> <a>#Backend-Developer</a></p>
                             </div>
                         </div>
 
-                        <div class="content">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                            <a href="#">#css</a> <a href="#">#responsive</a>
-                            <br>
-                            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                        <div class="content w3-justify">
+                            This Idea is inspired by many Social Media Platforms & Google Classroom. but we have tried to make it unique and more attractive. Almost everything is working in this application
                         </div>
                     </div>
                 </div>
@@ -247,20 +244,15 @@ if (isset($_POST['message'])) {
             <div class="column ">
                 <div class="card">
                     <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <figure class="image">
+                            <img src="media/images/avtar/Akash.jpg" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
                         <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                                </figure>
-                            </div>
                             <div class="media-content">
-                                <p class="title is-4">John Smith</p>
-                                <p class="subtitle is-6">@johnsmith</p>
+                                <p class="title is-4">Akash Chintakindi</p>
+                                <p class="subtitle is-6"><a>#Frontend-Developer</a></p>
                             </div>
                         </div>
 
@@ -268,8 +260,6 @@ if (isset($_POST['message'])) {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Phasellus nec iaculis mauris. <a>@bulmaio</a>.
                             <a href="#">#css</a> <a href="#">#responsive</a>
-                            <br>
-                            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                         </div>
                     </div>
                 </div>
@@ -277,20 +267,15 @@ if (isset($_POST['message'])) {
             <div class="column">
                 <div class="card">
                     <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <figure class="image">
+                            <img src="media/images/avtar/Ravindra.jpg" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
                         <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                                </figure>
-                            </div>
                             <div class="media-content">
-                                <p class="title is-4">John Smith</p>
-                                <p class="subtitle is-6">@johnsmith</p>
+                                <p class="title is-4">Ravindra Soma</p>
+                                <p class="subtitle is-6"><a>#Project-Member</a></p>
                             </div>
                         </div>
 
@@ -298,8 +283,6 @@ if (isset($_POST['message'])) {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Phasellus nec iaculis mauris. <a>@bulmaio</a>.
                             <a href="#">#css</a> <a href="#">#responsive</a>
-                            <br>
-                            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                         </div>
                     </div>
                 </div>
@@ -307,20 +290,15 @@ if (isset($_POST['message'])) {
             <div class="column">
                 <div class="card">
                     <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <figure class="image">
+                            <img src="media/images/avtar/Niranjan.jpg" alt="Placeholder image">
                         </figure>
                     </div>
                     <div class="card-content">
                         <div class="media">
-                            <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                                </figure>
-                            </div>
                             <div class="media-content">
-                                <p class="title is-4">John Smith</p>
-                                <p class="subtitle is-6">@johnsmith</p>
+                                <p class="title is-4">Niranjan Gundla</p>
+                                <p class="subtitle is-6"><a>#Project-Member</a></p>
                             </div>
                         </div>
 
@@ -328,8 +306,6 @@ if (isset($_POST['message'])) {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Phasellus nec iaculis mauris. <a>@bulmaio</a>.
                             <a href="#">#css</a> <a href="#">#responsive</a>
-                            <br>
-                            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
                         </div>
                     </div>
                 </div>
